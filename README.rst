@@ -16,7 +16,7 @@ Welcome to AIOGET
    :alt: coverage badge
 
 
-Asynchronous microservices for search, download, and parsing of webpages in Python, RabbitMQ, and Redis containerized with Docker.
+Asynchronous microservices for search, download, and parsing of webpages in Python, RabbitMQ, and Redis containerized with Docker. Based on Python's asyncio as well as aiohttp, aiofiles, and pika (rabbitmq) libs, most of the functions and methods include Python typing declarations to ease development as well.
 
 Project Goals
 =============
