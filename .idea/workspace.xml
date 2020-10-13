@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c17e40f0-4746-43a4-a66c-1fa9df3365e8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JupyterTrust" id="bf4f7f5d-a261-4179-b8c4-c6bc77086e4e" />
+  <component name="ProjectId" id="1iVhw2WogLiU5Q5TCbmwkHElT2V" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\CodeProjects\aioget" />
+      <recent name="F:\CodeProjects\aioget\configs" />
+      <recent name="F:\CodeProjects\aioget\tests\service" />
+      <recent name="F:\CodeProjects\aioget\docs\source" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\CodeProjects\aioget" />
+      <recent name="F:\CodeProjects\aioget\logging_svc" />
+      <recent name="F:\CodeProjects\aioget\configs\service" />
+      <recent name="F:\CodeProjects\aioget\parser_svc" />
+      <recent name="F:\CodeProjects\aioget\download_svc" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.sender">
+    <configuration name="receiver (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="aioget" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/receiver.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="send_multiple" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="aioget" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/rabbit/tutorials/prefetch" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/rabbit/tutorials/prefetch/send_multiple.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="sender" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="aioget" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sender.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_googlenews.test_parse" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="aioget" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/parser_scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_googlenews.test_parse&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest in tests" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="aioget" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.sender" />
+        <item itemvalue="Python.receiver (1)" />
+        <item itemvalue="Python tests.pytest in tests" />
+        <item itemvalue="Python tests.pytest for test_googlenews.test_parse" />
+        <item itemvalue="Python.send_multiple" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c17e40f0-4746-43a4-a66c-1fa9df3365e8" name="Default Changelist" comment="" />
+      <created>1601998910577</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1601998910577</updated>
+      <workItem from="1601998914044" duration="96000" />
+      <workItem from="1601999104104" duration="10683000" />
+      <workItem from="1602081873046" duration="2121000" />
+      <workItem from="1602093181493" duration="10807000" />
+      <workItem from="1602174435173" duration="1401000" />
+      <workItem from="1602176541487" duration="19669000" />
+      <workItem from="1602252773600" duration="15596000" />
+      <workItem from="1602354577197" duration="36001000" />
+      <workItem from="1602479046403" duration="43399000" />
+      <workItem from="1602608249883" duration="9718000" />
+      <workItem from="1602625356120" duration="153000" />
+      <workItem from="1602625515939" duration="1443000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1071" y="601" key="#Firefox_Settings" timestamp="1602470408695">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1071" y="601" key="#Firefox_Settings/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602470408695" />
+    <state x="906" y="378" key="#Inspections" timestamp="1602530499491">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="906" y="378" key="#Inspections/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602530499491" />
+    <state x="1077" y="489" key="#Web_Browsers" timestamp="1602470415119">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1077" y="489" key="#Web_Browsers/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602470415119" />
+    <state x="3111" y="438" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602552809837">
+      <screen x="2560" y="174" width="1920" height="1040" />
+    </state>
+    <state x="734" y="355" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602516854204" />
+    <state x="3111" y="438" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.2560.1400/2560.174.1920.1040@2560.174.1920.1040" timestamp="1602552809837" />
+    <state x="92" y="92" width="2376" height="1216" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog" timestamp="1602475201693">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="92" y="92" width="2376" height="1216" key="#com.intellij.execution.junit2.states.ComparisonFailureState$DiffDialog/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602475201693" />
+    <state x="1034" y="502" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1602477746918">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1034" y="502" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602477746918" />
+    <state x="1010" y="447" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1602202379963">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1010" y="447" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602202379963" />
+    <state x="1059" y="455" key="FileChooserDialogImpl" timestamp="1602202524067">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1059" y="455" key="FileChooserDialogImpl/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602202524067" />
+    <state width="2517" height="667" key="GridCell.Tab.0.bottom" timestamp="1602627613324">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="667" key="GridCell.Tab.0.bottom/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602627613324" />
+    <state width="1572" height="505" key="GridCell.Tab.0.bottom/0.0.2560.1400/2560.174.1920.1040@2560.174.1920.1040" timestamp="1602571339172" />
+    <state width="2517" height="667" key="GridCell.Tab.0.center" timestamp="1602627613324">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="667" key="GridCell.Tab.0.center/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602627613324" />
+    <state width="1572" height="505" key="GridCell.Tab.0.center/0.0.2560.1400/2560.174.1920.1040@2560.174.1920.1040" timestamp="1602571339172" />
+    <state width="2517" height="667" key="GridCell.Tab.0.left" timestamp="1602627613324">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="667" key="GridCell.Tab.0.left/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602627613324" />
+    <state width="1572" height="505" key="GridCell.Tab.0.left/0.0.2560.1400/2560.174.1920.1040@2560.174.1920.1040" timestamp="1602571339172" />
+    <state width="2517" height="667" key="GridCell.Tab.0.right" timestamp="1602627613324">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="667" key="GridCell.Tab.0.right/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602627613324" />
+    <state width="1572" height="505" key="GridCell.Tab.0.right/0.0.2560.1400/2560.174.1920.1040@2560.174.1920.1040" timestamp="1602571339172" />
+    <state width="2517" height="631" key="GridCell.Tab.1.bottom" timestamp="1602617350114">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="631" key="GridCell.Tab.1.bottom/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602617350114" />
+    <state width="2517" height="631" key="GridCell.Tab.1.center" timestamp="1602617350113">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="631" key="GridCell.Tab.1.center/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602617350113" />
+    <state width="2517" height="631" key="GridCell.Tab.1.left" timestamp="1602617350113">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="631" key="GridCell.Tab.1.left/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602617350113" />
+    <state width="2517" height="631" key="GridCell.Tab.1.right" timestamp="1602617350114">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state width="2517" height="631" key="GridCell.Tab.1.right/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602617350113" />
+    <state x="3146" y="430" key="SettingsEditor" timestamp="1602566746864">
+      <screen x="2560" y="174" width="1920" height="1040" />
+    </state>
+    <state x="781" y="345" key="SettingsEditor/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602530624774" />
+    <state x="3146" y="430" key="SettingsEditor/0.0.2560.1400/2560.174.1920.1040@2560.174.1920.1040" timestamp="1602566746864" />
+    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1602618597731">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602618597731" />
+    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1602395616599">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="92" y="92" width="2376" height="1216" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602395616599" />
+    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup" timestamp="1602626844230">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400/2560.174.1920.1040@0.0.2560.1400" timestamp="1602626844230" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/parser_svc/parser_service_driver.py</url>
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/conftest.py</url>
+          <line>16</line>
+          <option name="timeStamp" value="54" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/download_svc/download.py</url>
+          <line>227</line>
+          <option name="timeStamp" value="56" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/download_svc/download.py</url>
+          <line>112</line>
+          <option name="timeStamp" value="62" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/download_svc/download.py</url>
+          <line>114</line>
+          <option name="timeStamp" value="63" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/parser_scripts/test_google.py</url>
+          <line>19</line>
+          <option name="timeStamp" value="68" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_service_test_search.coverage" NAME="pytest for service.test_search Coverage Results" MODIFIED="1602474892616" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_in_test_async_queue_py.coverage" NAME="pytest in test_async_queue.py Coverage Results" MODIFIED="1602096970765" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_in_service.coverage" NAME="pytest in service Coverage Results" MODIFIED="1602522863612" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/service" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_in_test_sja_py.coverage" NAME="pytest in test_sja.py Coverage Results" MODIFIED="1602375391525" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/service" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_service_test_search_test__encode_site_search.coverage" NAME="pytest for service.test_search.test__encode_site_search Coverage Results" MODIFIED="1602475172366" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_filtration_test_my_redis.coverage" NAME="pytest for test_filtration.test_my_redis Coverage Results" MODIFIED="1602375267122" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_utils_test_process_pool.coverage" NAME="pytest for test_utils.test_process_pool Coverage Results" MODIFIED="1602519165795" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_rabbitmq_router_test_connect_to_message_exchange.coverage" NAME="pytest for test_rabbitmq_router.test_connect_to_message_exchange Coverage Results" MODIFIED="1602206402490" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_in_test_utils_py.coverage" NAME="pytest in test_utils.py Coverage Results" MODIFIED="1602517716983" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_rabbitmq_router_test_publish_items_to_rabbitmq.coverage" NAME="pytest for test_rabbitmq_router.test_publish_items_to_rabbitmq Coverage Results" MODIFIED="1602208367599" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_logger_test_rabbit_logger.coverage" NAME="pytest for test_logger.test_rabbit_logger Coverage Results" MODIFIED="1602108354671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_filtration_test_filter_entities_redis.coverage" NAME="pytest for test_filtration.test_filter_entities_redis Coverage Results" MODIFIED="1602199784929" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_in_tests.coverage" NAME="pytest in tests Coverage Results" MODIFIED="1602625444152" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_lob_webpages_test_parse.coverage" NAME="pytest for test_lob_webpages.test_parse Coverage Results" MODIFIED="1602519405318" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/parser_scripts" />
+    <SUITE FILE_PATH="coverage/aioget$receiver.coverage" NAME="receiver Coverage Results" MODIFIED="1602572715147" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rabbit/tutorials/prefetch" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_async_write_test_write_data.coverage" NAME="pytest for test_async_write.test_write_data Coverage Results" MODIFIED="1602095859118" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_in_test_async_requests_py.coverage" NAME="pytest in test_async_requests.py Coverage Results" MODIFIED="1602177819160" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_search_test_make_configuration.coverage" NAME="pytest for test_search.test_make_configuration Coverage Results" MODIFIED="1602520737663" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/service" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_async_requests_test_make_request.coverage" NAME="pytest for test_async_requests.test_make_request Coverage Results" MODIFIED="1602177719105" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_rabbitmq_router_test_bind_queue_to_exchange.coverage" NAME="pytest for test_rabbitmq_router.test_bind_queue_to_exchange Coverage Results" MODIFIED="1602206892286" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$sender.coverage" NAME="sender Coverage Results" MODIFIED="1602627552982" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_rabbitmq_router_test_consume_items_from_rabbitmq.coverage" NAME="pytest for test_rabbitmq_router.test_consume_items_from_rabbitmq Coverage Results" MODIFIED="1602207832294" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_utils_test_load_config.coverage" NAME="pytest for test_utils.test_load_config Coverage Results" MODIFIED="1602517609929" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_filtration_test_filter_garbage_search_results.coverage" NAME="pytest for test_filtration.test_filter_garbage_search_results Coverage Results" MODIFIED="1602108901597" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_in_test_async_filesystem_py.coverage" NAME="pytest in test_async_filesystem.py Coverage Results" MODIFIED="1602177860064" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_in_test_search_py.coverage" NAME="pytest in test_search.py Coverage Results" MODIFIED="1602477784828" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/service" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_in_test_download_py.coverage" NAME="pytest in test_download.py Coverage Results" MODIFIED="1602523234466" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/service" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_filtration_test_filter_garbage_url_search_result.coverage" NAME="pytest for test_filtration.test_filter_garbage_url_search_result Coverage Results" MODIFIED="1602189771718" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_utils_test_load_model.coverage" NAME="pytest for test_utils.test_load_model Coverage Results" MODIFIED="1602517646700" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$send_multiple.coverage" NAME="send_multiple Coverage Results" MODIFIED="1602572717569" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/rabbit/tutorials/prefetch" />
+    <SUITE FILE_PATH="coverage/aioget$consts.coverage" NAME="consts Coverage Results" MODIFIED="1602474209335" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/configs/base" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_rabbitmq_router_test_publish_message_to_exchange.coverage" NAME="pytest for test_rabbitmq_router.test_publish_message_to_exchange Coverage Results" MODIFIED="1602207609179" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_download_test_start.coverage" NAME="pytest for test_download.test_start Coverage Results" MODIFIED="1602527923649" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/service" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_utils_test_pop_arb_field_if_exists.coverage" NAME="pytest for test_utils.test_pop_arb_field_if_exists Coverage Results" MODIFIED="1602369687225" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$download.coverage" NAME="download Coverage Results" MODIFIED="1602527555957" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/download_svc" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_utils_test_set_arb.coverage" NAME="pytest for test_utils.test_set_arb Coverage Results" MODIFIED="1602369442020" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_search.coverage" NAME="pytest for test_search Coverage Results" MODIFIED="1602374432576" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/service" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_in_core.coverage" NAME="pytest in core Coverage Results" MODIFIED="1602369521071" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_rabbitmq_router_test_create_queue.coverage" NAME="pytest for test_rabbitmq_router.test_create_queue Coverage Results" MODIFIED="1602206559969" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_search_test__query_gen.coverage" NAME="pytest for test_search.test__query_gen Coverage Results" MODIFIED="1602477635537" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/service" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_service_test_search_test_make_configuration.coverage" NAME="pytest for service.test_search.test_make_configuration Coverage Results" MODIFIED="1602520691475" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_in_test_rabbitmq_router_py.coverage" NAME="pytest in test_rabbitmq_router.py Coverage Results" MODIFIED="1602208385000" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_proxy_test_proxy.coverage" NAME="pytest for test_proxy.test_proxy Coverage Results" MODIFIED="1602107543380" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_search_test_start.coverage" NAME="pytest for test_search.test_start Coverage Results" MODIFIED="1602465926889" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/service" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_google_test_parse.coverage" NAME="pytest for test_google.test_parse Coverage Results" MODIFIED="1602473919148" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/parser_scripts" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_sja_test_redis.coverage" NAME="pytest for test_sja.test_redis Coverage Results" MODIFIED="1602522686685" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/service" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_in_parser_scripts.coverage" NAME="pytest in parser_scripts Coverage Results" MODIFIED="1602374343450" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/parser_scripts" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_service_test_sja.coverage" NAME="pytest for service.test_sja Coverage Results" MODIFIED="1602393211702" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_googlenews_test_parse.coverage" NAME="pytest for test_googlenews.test_parse Coverage Results" MODIFIED="1602616664901" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/parser_scripts" />
+    <SUITE FILE_PATH="coverage/aioget$receiver__1_.coverage" NAME="receiver (1) Coverage Results" MODIFIED="1602627547488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_service_test_download_test_start.coverage" NAME="pytest for service.test_download.test_start Coverage Results" MODIFIED="1602474601162" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_filtration_test_filter_already_downloaded_url_redis.coverage" NAME="pytest for test_filtration.test_filter_already_downloaded_url_redis Coverage Results" MODIFIED="1602384527486" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_parser_scripts_test_lob_webpages.coverage" NAME="pytest for parser_scripts.test_lob_webpages Coverage Results" MODIFIED="1602519884448" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+    <SUITE FILE_PATH="coverage/aioget$parser.coverage" NAME="parser Coverage Results" MODIFIED="1602570563919" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/parser_svc" />
+    <SUITE FILE_PATH="coverage/aioget$utils.coverage" NAME="utils Coverage Results" MODIFIED="1602387103118" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_sja_test_update_record.coverage" NAME="pytest for test_sja.test_update_record Coverage Results" MODIFIED="1602375384172" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/service" />
+    <SUITE FILE_PATH="coverage/aioget$search_service_driver.coverage" NAME="search_service_driver Coverage Results" MODIFIED="1602546684533" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/search_svc" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_filtration_test_redis.coverage" NAME="pytest for test_filtration.test_redis Coverage Results" MODIFIED="1602189386173" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+    <SUITE FILE_PATH="coverage/aioget$pytest_for_test_async_filesystem_test_save_file.coverage" NAME="pytest for test_async_filesystem.test_save_file Coverage Results" MODIFIED="1602517836102" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/core" />
+  </component>
+</project>

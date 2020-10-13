@@ -1,0 +1,16 @@
+{
+    "default": {
+          "keywords": {
+            "en":[
+              "Russia", "Ukraine", "Afghanistan", "Albania", "Belarus", "Burundi", "Central African Republic", "DRC Congo",
+              "Croatia", "Cuba", "Iran", "Iraq", "Lebanon", "Libya", "Macedonia", "Serbia", "Somalia", "Sudan", "Syria",
+              "Venezuela", "Yemen", "Zimbabwe", "Bosnia and Herzegovina", "North Korea", "Mali", "Montenegro",
+              "Nicaragua", "South Sudan"
+            ]
+          },
+        "language": [
+            "en"
+        ],
+        "date_range": null
+    }
+}

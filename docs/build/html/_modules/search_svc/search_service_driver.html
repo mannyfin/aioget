@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>search_svc.search_service_driver &mdash; aioget 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> aioget
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">core</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/core.html">core package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">search service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/search_svc.html">search_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">download service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/download_svc.html">download_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">parser service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/parser_svc.html">parser_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/modules.html">parser_svc</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aioget</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>search_svc.search_service_driver</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for search_svc.search_service_driver</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;/..&quot;</span><span class="p">)</span>
+<span class="c1"># sys.path.insert(0, &#39;..&#39;)</span>
+<span class="c1"># sys.path.insert(0, &#39;../core&#39;)</span>
+
+<span class="kn">from</span> <span class="nn">core</span> <span class="kn">import</span> <span class="n">logger</span><span class="p">,</span> <span class="n">rabbitmq_router</span>
+<span class="kn">from</span> <span class="nn">search_svc.search</span> <span class="kn">import</span> <span class="n">SearchService</span>
+<span class="kn">from</span> <span class="nn">configs.base.consts</span> <span class="kn">import</span> <span class="n">INITIAL_SLEEP</span>
+
+<span class="kn">from</span> <span class="nn">sys</span> <span class="kn">import</span> <span class="n">platform</span><span class="p">,</span> <span class="n">path</span>
+
+<span class="k">if</span> <span class="n">platform</span> <span class="o">!=</span> <span class="s1">&#39;win32&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">uvloop</span>
+
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop_policy</span><span class="p">(</span><span class="n">uvloop</span><span class="o">.</span><span class="n">EventLoopPolicy</span><span class="p">())</span>
+
+<span class="n">basiclogger</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">rabbit_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search_service_driver.main">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">input_queue</span><span class="p">,</span> <span class="n">output_queue</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">service</span> <span class="o">=</span> <span class="n">SearchService</span><span class="p">(</span><span class="n">input_queue</span><span class="p">,</span> <span class="n">output_queue</span><span class="p">)</span>
+        <span class="n">workers</span><span class="p">,</span> <span class="n">queues</span><span class="p">,</span> <span class="n">session</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">rabbitmq_router</span><span class="o">.</span><span class="n">consume_items_from_rabbitmq</span><span class="p">(</span><span class="n">input_queue</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">input_queue_name</span><span class="p">),</span>
+                             <span class="o">*</span><span class="n">workers</span><span class="p">,</span>
+                             <span class="n">rabbitmq_router</span><span class="o">.</span><span class="n">publish_items_to_rabbitmq</span><span class="p">(</span><span class="n">output_queue</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">exchange_name</span><span class="p">,</span>
+                                                                       <span class="n">output_routing_key</span><span class="p">)</span>
+                             <span class="p">)</span>
+        <span class="c1"># for queue in queues:</span>
+        <span class="c1">#     await queue.join()</span>
+        <span class="c1"># input_queue.join()</span>
+        <span class="c1"># output_queue.join()</span>
+        <span class="c1"># for consumer in workers:</span>
+        <span class="c1">#     #canceling</span>
+        <span class="c1">#     consumer.cancel()</span>
+        <span class="c1"># await session.close()</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">basiclogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span></div>
+        <span class="c1"># todo return and resubmit the queues in case of catastrophic failure</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="n">input_queue</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+    <span class="n">output_queue</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+
+    <span class="n">exchange_name</span> <span class="o">=</span> <span class="s1">&#39;message&#39;</span>
+    <span class="n">input_routing_key</span> <span class="o">=</span> <span class="s1">&#39;entity&#39;</span>
+    <span class="n">input_queue_name</span> <span class="o">=</span> <span class="s1">&#39;search&#39;</span>
+
+    <span class="n">output_routing_key</span> <span class="o">=</span> <span class="s1">&#39;url&#39;</span>
+    <span class="n">output_queue_name</span> <span class="o">=</span> <span class="s1">&#39;download&#39;</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">INITIAL_SLEEP</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">connection</span><span class="p">,</span> <span class="n">channel</span> <span class="o">=</span> <span class="n">rabbitmq_router</span><span class="o">.</span><span class="n">connect_to_message_exchange</span><span class="p">(</span><span class="n">exchange_name</span><span class="o">=</span><span class="n">exchange_name</span><span class="p">,</span>
+                                                                              <span class="n">consumer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                                              <span class="n">prefetch</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+            <span class="n">consume_queue</span> <span class="o">=</span> <span class="n">rabbitmq_router</span><span class="o">.</span><span class="n">create_queue</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">input_queue_name</span><span class="p">)</span>
+            <span class="n">publish_queue</span> <span class="o">=</span> <span class="n">rabbitmq_router</span><span class="o">.</span><span class="n">create_queue</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">output_queue_name</span><span class="p">)</span>
+
+            <span class="n">rabbitmq_router</span><span class="o">.</span><span class="n">bind_queue_to_exchange</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">exchange_name</span><span class="p">,</span> <span class="n">input_queue_name</span><span class="p">,</span> <span class="n">input_routing_key</span><span class="p">)</span>
+            <span class="n">rabbitmq_router</span><span class="o">.</span><span class="n">bind_queue_to_exchange</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">exchange_name</span><span class="p">,</span> <span class="n">output_queue_name</span><span class="p">,</span> <span class="n">output_routing_key</span><span class="p">)</span>
+
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">(</span><span class="n">input_queue</span><span class="p">,</span> <span class="n">output_queue</span><span class="p">))</span>
+            <span class="n">channel</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="n">basiclogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, E.S.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

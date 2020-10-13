@@ -1,0 +1,9 @@
+{
+    "default": {
+        "language": [
+            "en",
+            "es"
+        ],
+        "date_range": null
+    }
+}

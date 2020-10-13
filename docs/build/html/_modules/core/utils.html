@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>core.utils &mdash; aioget 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> aioget
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">core</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/core.html">core package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">search service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/search_svc.html">search_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">download service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/download_svc.html">download_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">parser service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/parser_svc.html">parser_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/modules.html">parser_svc</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aioget</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>core.utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for core.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">concurrent.futures</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Coroutine</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">cpu_count</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="kn">from</span> <span class="nn">deprecated.sphinx</span> <span class="kn">import</span> <span class="n">deprecated</span>
+<span class="kn">from</span> <span class="nn">configs.base</span> <span class="kn">import</span> <span class="n">consts</span>
+<span class="kn">from</span> <span class="nn">core</span> <span class="kn">import</span> <span class="n">logger</span>
+
+<span class="n">basiclogger</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">rabbit_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="pop_arb_field_if_exists"><a class="viewcode-back" href="../../modules/core.html#core.utils.pop_arb_field_if_exists">[docs]</a><span class="k">def</span> <span class="nf">pop_arb_field_if_exists</span><span class="p">(</span><span class="n">msg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;values in the arb field exepected to be a dictionary.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;arb&#39;</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+        <span class="n">arb</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;arb&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">arb</span><span class="p">,</span> <span class="n">msg</span>
+    <span class="k">return</span> <span class="p">{},</span> <span class="n">msg</span></div>
+
+
+<div class="viewcode-block" id="set_arb"><a class="viewcode-back" href="../../modules/core.html#core.utils.set_arb">[docs]</a><span class="k">def</span> <span class="nf">set_arb</span><span class="p">(</span><span class="n">msg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">arb</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">arb</span><span class="p">:</span>
+        <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;arb&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">arb</span>
+    <span class="k">return</span> <span class="n">msg</span></div>
+
+
+<div class="viewcode-block" id="load_config"><a class="viewcode-back" href="../../modules/core.html#core.utils.load_config">[docs]</a><span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provide path to load the JSON config</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path: str, should be path to JSON file</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Any JSON-serializable data. Usually a dict for the config files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="make_config"><a class="viewcode-back" href="../../modules/core.html#core.utils.make_config">[docs]</a><span class="k">def</span> <span class="nf">make_config</span><span class="p">(</span><span class="n">paths</span><span class="p">):</span>
+    <span class="n">configs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+        <span class="n">business_driver</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">stem</span> <span class="c1">#os.path.split(fp[0])[1] #fp.rsplit(&#39;/&#39;, 2)[1]</span>
+        <span class="k">if</span> <span class="n">business_driver</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">configs</span><span class="p">:</span>
+            <span class="n">configs</span><span class="p">[</span><span class="n">business_driver</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">newconfig</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">newconfig</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">configs</span><span class="p">[</span><span class="n">business_driver</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+    <span class="k">return</span> <span class="n">configs</span></div>
+
+
+<div class="viewcode-block" id="load_model"><a class="viewcode-back" href="../../modules/core.html#core.utils.load_model">[docs]</a><span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;rb&#39;</span><span class="p">,</span> <span class="n">response_encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span></div>
+
+
+<div class="viewcode-block" id="merge_configs"><a class="viewcode-back" href="../../modules/core.html#core.utils.merge_configs">[docs]</a><span class="k">def</span> <span class="nf">merge_configs</span><span class="p">(</span><span class="n">driver</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">client</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Merge Driver and Client config. The Client configs will overwrite matching keys in the Driver config.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        driver (dict): driver dictionary of configs</span>
+<span class="sd">        client (dict): client dictionary of configs</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Merged configs (dict)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="n">driver</span><span class="p">,</span> <span class="o">**</span><span class="n">client</span><span class="p">}</span></div>
+
+
+<span class="c1"># def process_pool(workers: int,</span>
+<span class="c1">#                  func: Callable,</span>
+<span class="c1">#                  iterable: Union[list, tuple, asyncio.Queue]) -&gt; List[Coroutine]:</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Pass an iterable to a process pool and return a list of asyncio futures.</span>
+<span class="c1">#</span>
+<span class="c1">#     Args:</span>
+<span class="c1">#         workers: Number of workers in the Process Pool</span>
+<span class="c1">#         func: function</span>
+<span class="c1">#         iterable: unique values you will pass to each process</span>
+<span class="c1">#         args: additional values passed to every process</span>
+<span class="c1">#         kwargs: additional values passed to every process</span>
+<span class="c1">#</span>
+<span class="c1">#     Returns:</span>
+<span class="c1">#         List of asyncio.Futures</span>
+<span class="c1">#</span>
+<span class="c1">#     Examples:</span>
+<span class="c1">#</span>
+<span class="c1">#         .. code-block:: python</span>
+<span class="c1">#             :linenos:</span>
+<span class="c1">#</span>
+<span class="c1">#             def cpu_bound_func(a, b=b):</span>
+<span class="c1">#                 # CPU-bound operations will block the event loop:</span>
+<span class="c1">#                 # in general it is preferable to run them in a</span>
+<span class="c1">#                 # process pool. Simulating this. with arg and kwarg.</span>
+<span class="c1">#                 time.sleep(1)</span>
+<span class="c1">#                 return a**2, b*-1</span>
+<span class="c1">#</span>
+<span class="c1">#             def async_process_pool(workers: int, func: Callable, iterable, *args, **kwargs) -&gt; list:</span>
+<span class="c1">#                 if workers &lt;= 0:</span>
+<span class="c1">#                     workers = cpu_count()</span>
+<span class="c1">#                 loop = asyncio.get_running_loop()</span>
+<span class="c1">#                 with concurrent.futures.ProcessPoolExecutor(workers) as pool:</span>
+<span class="c1">#                     return [loop.run_in_executor(pool, partial(func, _ , *args, **kwargs)) for _ in iterable]</span>
+<span class="c1">#</span>
+<span class="c1">#             # submitting futures to the process pool and getting results as completed. Not necessarily in order.</span>
+<span class="c1">#             async def exhaust_async_process_pool():</span>
+<span class="c1">#                 for _ in asyncio.as_completed(async_process_pool(0, cpu_bound_func, list(range(8)), b=2)):</span>
+<span class="c1">#                     result = await _</span>
+<span class="c1">#                     print(result)</span>
+<span class="c1">#</span>
+<span class="c1">#             start = time.time()</span>
+<span class="c1">#             asyncio.run(exhaust_async_process_pool())</span>
+<span class="c1">#             end = time.time() - start</span>
+<span class="c1">#             print(end)  # should take a littler longer than math.ceil(8/workers) due to process overhead.</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#         Output:</span>
+<span class="c1">#</span>
+<span class="c1">#             (1, -2)</span>
+<span class="c1">#             (0, -2)</span>
+<span class="c1">#             (9, -2)</span>
+<span class="c1">#             (4, -2)</span>
+<span class="c1">#             (16, -2)</span>
+<span class="c1">#             (25, -2)</span>
+<span class="c1">#             (36, -2)</span>
+<span class="c1">#</span>
+<span class="c1">#         .. todo:: make this work with async queues correctly...</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     if workers &lt;= 0:</span>
+<span class="c1">#         workers = cpu_count()</span>
+<span class="c1">#     loop = asyncio.get_running_loop()</span>
+<span class="c1">#     with concurrent.futures.ProcessPoolExecutor(workers) as pool:</span>
+<span class="c1">#         if isinstance(iterable, (list, tuple)):</span>
+<span class="c1">#             return [loop.run_in_executor(pool, partial(func, **value)) for value in iterable]</span>
+<span class="c1">#         elif isinstance(iterable, asyncio.Queue):</span>
+<span class="c1">#             # todo make this work</span>
+<span class="c1">#             futures = []</span>
+<span class="c1">#             for ctr in range(iterable.qsize()):</span>
+<span class="c1">#                 value = iterable.get_nowait()</span>
+<span class="c1">#                 futures.append(loop.run_in_executor(pool, partial(func, **value)))</span>
+<span class="c1">#                 iterable.task_done()</span>
+<span class="c1">#             return futures</span>
+
+
+<div class="viewcode-block" id="parse_consumer"><a class="viewcode-back" href="../../modules/core.html#core.utils.parse_consumer">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">parse_consumer</span><span class="p">(</span><span class="n">next_queue</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">,</span> <span class="n">write_queue</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">,</span>
+                         <span class="n">func</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parses the response html in a concurrent.futures.ProcessPoolExcecutor Process Pool. This function checks if</span>
+<span class="sd">    next_queue is empty. If it is not, then it empties it by getting each item in next_queue and passing to the</span>
+<span class="sd">    Process Pool and returing a future. The future is then put on the write_queue.</span>
+
+<span class="sd">    If queue&#39;s requests are completed and next_queue has completed (i.e. no unfinished tasks in either queue),</span>
+<span class="sd">    then break.</span>
+
+<span class="sd">    .. todo:: this could be refactored by async_queue.worker</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        next_queue: queue containing the responses</span>
+<span class="sd">        write_queue: queue to put the list of asyncio.Futures on</span>
+<span class="sd">        queue: queue containing the requests to be made. It is used to know when to finish this task</span>
+<span class="sd">        func: function to use in the process pool. This is self.parse</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">cpu_count</span><span class="p">(),</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="c1"># pool = concurrent.futures.ProcessPoolExecutor(1)  # useful for debugging</span>
+
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">consts</span><span class="o">.</span><span class="n">ASYNC_SLEEP</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">next_queue</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
+
+            <span class="n">value</span> <span class="o">=</span> <span class="k">await</span> <span class="n">next_queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">func</span><span class="p">:</span>
+                <span class="n">func</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;parse_func&#39;</span><span class="p">)</span>
+            <span class="n">futs</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">run_in_executor</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">partial</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="o">**</span><span class="n">value</span><span class="p">))</span>
+            <span class="k">await</span> <span class="n">write_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">futs</span><span class="p">)</span>
+            <span class="n">func</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="c1"># futures.append(loop.run_in_executor(pool, partial(func, **value)))</span>
+
+            <span class="n">next_queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+        <span class="c1"># if not queue._unfinished_tasks and not next_queue._unfinished_tasks:</span>
+        <span class="c1">#     break</span>
+    <span class="n">pool</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>  <span class="c1"># not very useful...</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, E.S.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,305 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>download_svc package &mdash; aioget 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="parser_svc package" href="parser_svc.html" />
+    <link rel="prev" title="search_svc package" href="search_svc.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> aioget
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">core</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core.html">core package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">search service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="search_svc.html">search_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">download service</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">download_svc package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-download_svc.download">download_svc.download module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-download_svc.download_service_driver">download_svc.download_service_driver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-download_svc">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">parser service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="parser_svc.html">parser_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">parser_svc</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aioget</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>download_svc package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/download_svc.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="download-svc-package">
+<h1>download_svc package<a class="headerlink" href="#download-svc-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-download_svc.download">
+<span id="download-svc-download-module"></span><h2>download_svc.download module<a class="headerlink" href="#module-download_svc.download" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="download_svc.download.DownloadService">
+<em class="property">class </em><code class="sig-name descname">DownloadService</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em>, <em class="sig-param"><span class="n">publish_queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/download_svc/download.html#DownloadService"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#download_svc.download.DownloadService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt id="download_svc.download.DownloadService.SVC_CONFIG_PATH">
+<code class="sig-name descname">SVC_CONFIG_PATH</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><em class="property"> = '..\\configs\\service\\download.json'</em><a class="headerlink" href="#download_svc.download.DownloadService.SVC_CONFIG_PATH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="download_svc.download.DownloadService.BIZ_CONFIG_PATH">
+<code class="sig-name descname">BIZ_CONFIG_PATH</code><em class="property">: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></em><em class="property"> = '..\\configs\\business_drivers\\download\\download.json'</em><a class="headerlink" href="#download_svc.download.DownloadService.BIZ_CONFIG_PATH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="download_svc.download.DownloadService.start">
+<code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/download_svc/download.html#DownloadService.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#download_svc.download.DownloadService.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the Download Service</p>
+<p>Returns:</p>
+<p>..todo: in filtering downloads, if download already exists, but for different business function, just bypass
+downloads</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="download_svc.download.DownloadService.import_parser_funcs">
+<code class="sig-name descname">import_parser_funcs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/download_svc/download.html#DownloadService.import_parser_funcs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#download_svc.download.DownloadService.import_parser_funcs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dynamic importing of parse functions into the business configuration</p>
+<p class="rubric">Examples</p>
+<p>“media”: “parser.snapshot.parse”,</p>
+<p>will look for the <cite>parse</cite> function in the src/parser/snapshot.py module</p>
+<p>Then it will add the function to the service configuration under:
+service_config[‘funcs’][‘media’] = parse</p>
+<p>The parse func can be used normally:
+parse(kwargs)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="download_svc.download.DownloadService.put_onto_download_queue">
+<em class="property">async </em><code class="sig-name descname">put_onto_download_queue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">download_queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/download_svc/download.html#DownloadService.put_onto_download_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#download_svc.download.DownloadService.put_onto_download_queue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="download_svc.download.DownloadService.write_response">
+<em class="property">async </em><code class="sig-name descname">write_response</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">write_queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em>, <em class="sig-param"><span class="n">publish_queue</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>asyncio.queues.Queue<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/download_svc/download.html#DownloadService.write_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#download_svc.download.DownloadService.write_response" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-download_svc.download_service_driver">
+<span id="download-svc-download-service-driver-module"></span><h2>download_svc.download_service_driver module<a class="headerlink" href="#module-download_svc.download_service_driver" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="download_svc.download_service_driver.main">
+<em class="property">async </em><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_queue</span></em>, <em class="sig-param"><span class="n">output_queue</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/download_svc/download_service_driver.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#download_svc.download_service_driver.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-download_svc">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-download_svc" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="parser_svc.html" class="btn btn-neutral float-right" title="parser_svc package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="search_svc.html" class="btn btn-neutral float-left" title="search_svc package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, E.S.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

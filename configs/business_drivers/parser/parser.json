@@ -1,0 +1,14 @@
+{
+  "media": {"parser": "parser_scripts.news_media.parse",
+            "exit_routing_key": "media"
+                     },
+  "line_of_business": {"parser": "parser_scripts.lob_webpages.parse",
+                       "exit_routing_key": "lob"
+                       },
+  "sja": {"parser": "parser_scripts.panjiva.parse",
+          "exit_routing_key": "sja"
+          },
+  "open_corporates": {"parser": "parser_scripts.open_corporates.parse",
+                      "exit_routing_key": "biz_record"
+                      }
+}

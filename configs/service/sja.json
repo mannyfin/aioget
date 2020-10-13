@@ -1,0 +1,7 @@
+{
+  "redis_db_params": {
+    "host": "redis",
+    "port": 6379,
+    "db":  2
+  }
+}

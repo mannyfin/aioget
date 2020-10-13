@@ -1,0 +1,8 @@
+{
+  "JOSHUA_ROOT": "/data/joshua/apache-joshua-es-en-2016-11-18",
+  "HOST": "localhost",
+  "PORT": "5674",
+  "docker": {"container": "container_name",
+             "lang_pack":  "lang_pack"
+  }
+}

@@ -1,0 +1,704 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>core package &mdash; aioget 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="search_svc package" href="search_svc.html" />
+    <link rel="prev" title="Welcome to AIOGET" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> aioget
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">core</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">core package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-core.async_filesystem">core.async_filesystem module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-core.async_queue">core.async_queue module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-core.async_requests">core.async_requests module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-core.async_write">core.async_write module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-core.filtration">core.filtration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-core.logger">core.logger module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-core.proxy">core.proxy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-core.rabbitmq_router">core.rabbitmq_router module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-core.utils">core.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-core">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">search service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="search_svc.html">search_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">download service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="download_svc.html">download_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">parser service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="parser_svc.html">parser_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">parser_svc</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aioget</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>core package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/core.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="core-package">
+<h1>core package<a class="headerlink" href="#core-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-core.async_filesystem">
+<span id="core-async-filesystem-module"></span><h2>core.async_filesystem module<a class="headerlink" href="#module-core.async_filesystem" title="Permalink to this headline">¶</a></h2>
+<p>Linux-based File System for saving/searching/loading files</p>
+<dl class="py function">
+<dt id="core.async_filesystem.create_fs">
+<code class="sig-name descname">create_fs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fs</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/async_filesystem.html#create_fs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.async_filesystem.create_fs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a File System directory. If the directory already exists, it does not overwrite the contents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – path or directory name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="core.async_filesystem.save_file">
+<em class="property">async </em><code class="sig-name descname">save_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fpath</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">html</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span>ByteString<span class="p">]</span></span></em>, <em class="sig-param"><span class="n">encoding</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><a class="reference internal" href="../_modules/core/async_filesystem.html#save_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.async_filesystem.save_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encodes the filepath and saves the html using async_write</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fpath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Top of the filesystem directory, path or directory name</p></li>
+<li><p><strong>date</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – date in YYYY-MM-DD (with or without delimiter is fine). Directory will be created one level down</p></li>
+<li><p><strong>fs</strong> (<em>from</em>) – </p></li>
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – url str to check in the filesystem. It is decoded using _decode_filepath(url)</p></li>
+<li><p><strong>html</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.9)"><em>bytes</em></a>) – html response string to be written</p></li>
+<li><p><strong>encoding</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>path string if written, and False if Exception was raised.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-core.async_queue">
+<span id="core-async-queue-module"></span><h2>core.async_queue module<a class="headerlink" href="#module-core.async_queue" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="core.async_queue.get_queue">
+<code class="sig-name descname">get_queue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">maxsize</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">0</span></em><span class="sig-paren">)</span> &#x2192; asyncio.queues.Queue<a class="reference internal" href="../_modules/core/async_queue.html#get_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.async_queue.get_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an FIFO asyncio.Queue object instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>maxsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – number of items allowed in the queue. If maxsize &lt;= 0 the queue size is infinite</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>asyncio.Queue instance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="core.async_queue.set_onto_queue">
+<em class="property">async </em><code class="sig-name descname">set_onto_queue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em>, <em class="sig-param"><span class="n">item</span><span class="p">:</span> <span class="n">Any</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/async_queue.html#set_onto_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.async_queue.set_onto_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pushes an item onto an asyncio.Queue</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queue</strong> – asyncio.Queue instance</p></li>
+<li><p><strong>item</strong> – Any</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>asyncio.Queue</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="core.async_queue.get_from_queue">
+<em class="property">async </em><code class="sig-name descname">get_from_queue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em><span class="sig-paren">)</span> &#x2192; Any<a class="reference internal" href="../_modules/core/async_queue.html#get_from_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.async_queue.get_from_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pops an item off the asyncio.Queue</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>queue</strong> – asyncio.Queue instance</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>item from the asyncio.Queue</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="core.async_queue.set_many_onto_queue">
+<em class="property">async </em><code class="sig-name descname">set_many_onto_queue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em>, <em class="sig-param"><span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/async_queue.html#set_many_onto_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.async_queue.set_many_onto_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function to push multiple items onto the queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queue</strong> – asyncio.Queue</p></li>
+<li><p><strong>iterable</strong> – iterable containing the items</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>asyncio.Queue</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="core.async_queue.worker">
+<em class="property">async </em><code class="sig-name descname">worker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em>, <em class="sig-param"><span class="n">next_queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em>, <em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/async_queue.html#worker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.async_queue.worker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-core.async_requests">
+<span id="core-async-requests-module"></span><h2>core.async_requests module<a class="headerlink" href="#module-core.async_requests" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="core.async_requests.AsyncHttpRequests">
+<em class="property">class </em><code class="sig-name descname">AsyncHttpRequests</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">connections</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">200</span></em>, <em class="sig-param"><span class="n">retries</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">3</span></em>, <em class="sig-param"><span class="n">timeout</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)">float</a></span> <span class="o">=</span> <span class="default_value">100</span></em>, <em class="sig-param"><span class="n">use_proxy</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">use_headers</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/async_requests.html#AsyncHttpRequests"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.async_requests.AsyncHttpRequests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py attribute">
+<dt id="core.async_requests.AsyncHttpRequests.bot_resp">
+<code class="sig-name descname">bot_resp</code><em class="property"> = [&quot;We've detected unusual activity from your computer network&quot;, 'META NAME=&quot;ROBOTS&quot;']</em><a class="headerlink" href="#core.async_requests.AsyncHttpRequests.bot_resp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="core.async_requests.AsyncHttpRequests.make_request">
+<em class="property">async </em><code class="sig-name descname">make_request</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">session</span><span class="p">:</span> <span class="n">aiohttp.client.ClientSession</span></em>, <em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">proxy_account</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">response_encoding</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ssl</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><span class="p">]</span><a class="reference internal" href="../_modules/core/async_requests.html#AsyncHttpRequests.make_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.async_requests.AsyncHttpRequests.make_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a single asynchronous request and return the response text and status code</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>proxy_account</strong> – </p></li>
+<li><p><strong>session</strong> – An aiohttp.client.ClientSession object</p></li>
+<li><p><strong>url</strong> – string</p></li>
+<li><p><strong>response_encoding</strong> – encoding to apply for response text. Default None is utf-8</p></li>
+<li><p><strong>ssl</strong> – ssl verification, Default. False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>response text (str), and response status code (int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="core.async_requests.AsyncHttpRequests.prep_request_params">
+<code class="sig-name descname">prep_request_params</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">proxy_account</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a><span class="p">]</span><span class="p">, </span>Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><span class="p">]</span><a class="reference internal" href="../_modules/core/async_requests.html#AsyncHttpRequests.prep_request_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.async_requests.AsyncHttpRequests.prep_request_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the headers and proxy params for a request.
+Only creates headers if <strong>self.use_headers = True</strong> and
+only creates proxy if <strong>self.use_proxy = True</strong>.
+The aiohttp library as of this creation only supports http headers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>proxy_account</strong> – </p></li>
+<li><p><strong>url</strong> – string</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>header(dict), proxy(str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="core.async_requests.AsyncHttpRequests.handle_requests">
+<em class="property">async </em><code class="sig-name descname">handle_requests</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em>, <em class="sig-param"><span class="n">next_queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/async_requests.html#AsyncHttpRequests.handle_requests"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.async_requests.AsyncHttpRequests.handle_requests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called by the worker to make a single request and return a single response back to the worker.
+Tries a request up to self.retries number of times. If a cache_url is provided, it will attempt on the last
+attempt.</p>
+<p>Successful responses and failed responses are put onto the <cite>next_queue</cite> along with the item that was fetched
+from <cite>queue</cite>. Failed responses return None, and can be used for auditing purposes or retrying at a later date.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queue</strong> (<a class="reference external" href="https://docs.python.org/3/library/asyncio-queue.html#asyncio.Queue" title="(in Python v3.9)"><em>asyncio.Queue</em></a>) – queue of dicts with at least the keys: url, cache_url, response_encoding.</p></li>
+<li><p><strong>next_queue</strong> (<a class="reference external" href="https://docs.python.org/3/library/asyncio-queue.html#asyncio.Queue" title="(in Python v3.9)"><em>asyncio.Queue</em></a>) – queue of dicts with at least the keys: url, cache_url, response_encoding,</p></li>
+<li><p><strong>response.</strong> – </p></li>
+<li><p><strong>args</strong> – </p></li>
+<li><p><strong>kwargs</strong> – includes the aiohttp.ClientSession object passed as session</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="core.async_requests.AsyncHttpRequests.bot_response">
+<code class="sig-name descname">bot_response</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">status_code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span></em>, <em class="sig-param"><span class="n">response</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a><a class="reference internal" href="../_modules/core/async_requests.html#AsyncHttpRequests.bot_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.async_requests.AsyncHttpRequests.bot_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>If response text has some typical bot stuff, count it as a fail with status_code 700. While those strings may
+occur in some tech or how-to articles, more likely than not we got banned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>status_code</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – status code of the response.</p></li>
+<li><p><strong>response</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – response string</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The same status code if bot activity not detected, else 700 indicating a fail.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>status_code (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-core.async_write">
+<span id="core-async-write-module"></span><h2>core.async_write module<a class="headerlink" href="#module-core.async_write" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="core.async_write.write_data">
+<em class="property">async </em><code class="sig-name descname">write_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">data</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">mode</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'a'</span></em>, <em class="sig-param"><span class="n">encoding</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.9)">None</a><a class="reference internal" href="../_modules/core/async_write.html#write_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.async_write.write_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Asynchronously write to a file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> – File name or path/to/write/file.csv, should include extension</p></li>
+<li><p><strong>data</strong> – The data or expression of the date to be written i.e data = ‘|’.join(mylist)</p></li>
+<li><p><strong>mode</strong> – Default ‘a’. Usual python mode for writing, ex, w, a, w+, etc.</p></li>
+<li><p><strong>encoding</strong> – Default - None (‘utf-8’). Additional encoding supplied, e.g. ‘latin-1’</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns: None</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-core.filtration">
+<span id="core-filtration-module"></span><h2>core.filtration module<a class="headerlink" href="#module-core.filtration" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="core.filtration.filter_entities_redis">
+<code class="sig-name descname">filter_entities_redis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span></em>, <em class="sig-param"><span class="n">language</span></em>, <em class="sig-param"><span class="n">business_function</span></em>, <em class="sig-param"><span class="n">refresh_period</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></span></em>, <em class="sig-param"><span class="n">master_search_history</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../_modules/core/filtration.html#filter_entities_redis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.filtration.filter_entities_redis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take an entity, language, and business_function combination and check if it was searched in a Redis DB. If not,
+return the entity and do the search. If it was, then check if searched within refresh period. If searched within
+refresh period, don’t do the search. Only do the search if older than the refresh period.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entity</strong> – </p></li>
+<li><p><strong>language</strong> – </p></li>
+<li><p><strong>business_function</strong> – </p></li>
+<li><p><strong>refresh_period</strong> – </p></li>
+<li><p><strong>master_search_history</strong> – Redis DB host - localhost, port = 6379, db=0</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the search should be performed
+False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="core.filtration.filter_garbage_url_search_result">
+<code class="sig-name descname">filter_garbage_url_search_result</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">url_filter_exclusion_patterns</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../_modules/core/filtration.html#filter_garbage_url_search_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.filtration.filter_garbage_url_search_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>If any of the url_filter_exclusion_patterns appear, then don’t bother with it…</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="core.filtration.filter_by_date">
+<code class="sig-name descname">filter_by_date</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date_last_searched</span></em>, <em class="sig-param"><span class="n">refresh_period</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../_modules/core/filtration.html#filter_by_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.filtration.filter_by_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="core.filtration.filter_already_downloaded_url_redis">
+<code class="sig-name descname">filter_already_downloaded_url_redis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">refresh_period</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></span></em>, <em class="sig-param"><span class="n">master_download_history</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../_modules/core/filtration.html#filter_already_downloaded_url_redis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.filtration.filter_already_downloaded_url_redis" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-core.logger">
+<span id="core-logger-module"></span><h2>core.logger module<a class="headerlink" href="#module-core.logger" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="core.logger.rabbit_logger">
+<code class="sig-name descname">rabbit_logger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">level</span><span class="o">=</span><span class="default_value">'debug'</span></em>, <em class="sig-param"><span class="n">host</span><span class="o">=</span><span class="default_value">'rabbit'</span></em>, <em class="sig-param"><span class="n">port</span><span class="o">=</span><span class="default_value">5672</span></em>, <em class="sig-param"><span class="n">connection_params</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>pika.connection.ConnectionParameters<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">format_log</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/logger.html#rabbit_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.logger.rabbit_logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-core.proxy">
+<span id="core-proxy-module"></span><h2>core.proxy module<a class="headerlink" href="#module-core.proxy" title="Permalink to this headline">¶</a></h2>
+<p>A helper class to include proxies in requests</p>
+<dl class="py class">
+<dt id="core.proxy.Proxy">
+<em class="property">class </em><code class="sig-name descname">Proxy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">proxy_kind</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/proxy.html#Proxy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.proxy.Proxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-core.rabbitmq_router">
+<span id="core-rabbitmq-router-module"></span><h2>core.rabbitmq_router module<a class="headerlink" href="#module-core.rabbitmq_router" title="Permalink to this headline">¶</a></h2>
+<p>Helper functions for using RabbitMQ</p>
+<dl class="py function">
+<dt id="core.rabbitmq_router.connect_to_message_exchange">
+<code class="sig-name descname">connect_to_message_exchange</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">host</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'rabbit'</span></em>, <em class="sig-param"><span class="n">exchange_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'message'</span></em>, <em class="sig-param"><span class="n">exchange_type</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'topic'</span></em>, <em class="sig-param"><span class="n">consumer</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">prefetch</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">100</span></em>, <em class="sig-param"><span class="n">port</span><span class="o">=</span><span class="default_value">5672</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/rabbitmq_router.html#connect_to_message_exchange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.rabbitmq_router.connect_to_message_exchange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make connection to an exchange using a Blocking Connection.
+.. todo: change to use async</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port</strong> – </p></li>
+<li><p><strong>prefetch</strong> – </p></li>
+<li><p><strong>consumer</strong> – </p></li>
+<li><p><strong>host</strong> – </p></li>
+<li><p><strong>exchange_name</strong> – </p></li>
+<li><p><strong>exchange_type</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>connection to channel (used for when you want to do connection.close()
+channel: connection channel (used to publish/consume messages to/from exchange)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>connection</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="core.rabbitmq_router.create_queue">
+<code class="sig-name descname">create_queue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">channel</span></em>, <em class="sig-param"><span class="n">queue_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">exclusive</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">durable</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span> <span class="o">=</span> <span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/rabbitmq_router.html#create_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.rabbitmq_router.create_queue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="core.rabbitmq_router.bind_queue_to_exchange">
+<code class="sig-name descname">bind_queue_to_exchange</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">channel</span></em>, <em class="sig-param"><span class="n">exchange_name</span></em>, <em class="sig-param"><span class="n">queue_name</span></em>, <em class="sig-param"><span class="n">routing_key</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/rabbitmq_router.html#bind_queue_to_exchange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.rabbitmq_router.bind_queue_to_exchange" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="core.rabbitmq_router.publish_message_to_exchange">
+<code class="sig-name descname">publish_message_to_exchange</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">channel</span></em>, <em class="sig-param"><span class="n">exchange</span></em>, <em class="sig-param"><span class="n">routing_key</span></em>, <em class="sig-param"><span class="n">message</span></em>, <em class="sig-param"><span class="n">headers</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a><a class="reference internal" href="../_modules/core/rabbitmq_router.html#publish_message_to_exchange"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.rabbitmq_router.publish_message_to_exchange" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="core.rabbitmq_router.consume_items_from_rabbitmq">
+<em class="property">async </em><code class="sig-name descname">consume_items_from_rabbitmq</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em>, <em class="sig-param"><span class="n">channel</span></em>, <em class="sig-param"><span class="n">queue_name</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">inactivity</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">0.001</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/rabbitmq_router.html#consume_items_from_rabbitmq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.rabbitmq_router.consume_items_from_rabbitmq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Consumes items from a RabbitMQ Queue and puts the items onto an asyncio.Queue for consumption by a Service
+Runs forever.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queue</strong> – asyncio.Queue</p></li>
+<li><p><strong>channel</strong> – pika.BlockingConnection().channel() object</p></li>
+<li><p><strong>queue_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – name of a bound queue</p></li>
+<li><p><strong>inactivity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – timeout in s</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="core.rabbitmq_router.publish_items_to_rabbitmq">
+<em class="property">async </em><code class="sig-name descname">publish_items_to_rabbitmq</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em>, <em class="sig-param"><span class="n">channel</span></em>, <em class="sig-param"><span class="n">exchange_name</span></em>, <em class="sig-param"><span class="n">routing_key</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/rabbitmq_router.html#publish_items_to_rabbitmq"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.rabbitmq_router.publish_items_to_rabbitmq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do not supply routing key parameter if you are publishing to multiple queues. If so, then the message should be
+of the format:</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="n">msg</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;routing_key&#39;</span><span class="p">:</span> <span class="n">routing</span><span class="o">.</span><span class="n">key</span><span class="p">,</span>
+       <span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;keys&#39;</span><span class="p">:</span> <span class="s1">&#39;values&#39;</span><span class="p">}</span>
+       <span class="p">}</span>
+</pre></div>
+</td></tr></table></div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queue</strong> – </p></li>
+<li><p><strong>channel</strong> – </p></li>
+<li><p><strong>exchange_name</strong> – </p></li>
+<li><p><strong>routing_key</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-core.utils">
+<span id="core-utils-module"></span><h2>core.utils module<a class="headerlink" href="#module-core.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="core.utils.pop_arb_field_if_exists">
+<code class="sig-name descname">pop_arb_field_if_exists</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a><span class="p">]</span><a class="reference internal" href="../_modules/core/utils.html#pop_arb_field_if_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.utils.pop_arb_field_if_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>values in the arb field exepected to be a dictionary.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="core.utils.set_arb">
+<code class="sig-name descname">set_arb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></span></em>, <em class="sig-param"><span class="n">arb</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a><a class="reference internal" href="../_modules/core/utils.html#set_arb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.utils.set_arb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="core.utils.load_config">
+<code class="sig-name descname">load_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a><a class="reference internal" href="../_modules/core/utils.html#load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.utils.load_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide path to load the JSON config</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – str, should be path to JSON file</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Any JSON-serializable data. Usually a dict for the config files.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="core.utils.make_config">
+<code class="sig-name descname">make_config</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">paths</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/utils.html#make_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.utils.make_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="core.utils.load_model">
+<code class="sig-name descname">load_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">mode</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span> <span class="o">=</span> <span class="default_value">'rb'</span></em>, <em class="sig-param"><span class="n">response_encoding</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/utils.html#load_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.utils.load_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="core.utils.merge_configs">
+<code class="sig-name descname">merge_configs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">driver</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></span></em>, <em class="sig-param"><span class="n">client</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a><a class="reference internal" href="../_modules/core/utils.html#merge_configs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.utils.merge_configs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge Driver and Client config. The Client configs will overwrite matching keys in the Driver config.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>driver</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – driver dictionary of configs</p></li>
+<li><p><strong>client</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – client dictionary of configs</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Merged configs (dict)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="core.utils.parse_consumer">
+<em class="property">async </em><code class="sig-name descname">parse_consumer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">next_queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em>, <em class="sig-param"><span class="n">write_queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em>, <em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Callable<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/core/utils.html#parse_consumer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#core.utils.parse_consumer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the response html in a concurrent.futures.ProcessPoolExcecutor Process Pool. This function checks if
+next_queue is empty. If it is not, then it empties it by getting each item in next_queue and passing to the
+Process Pool and returing a future. The future is then put on the write_queue.</p>
+<p>If queue’s requests are completed and next_queue has completed (i.e. no unfinished tasks in either queue),
+then break.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>this could be refactored by async_queue.worker</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>next_queue</strong> – queue containing the responses</p></li>
+<li><p><strong>write_queue</strong> – queue to put the list of asyncio.Futures on</p></li>
+<li><p><strong>queue</strong> – queue containing the requests to be made. It is used to know when to finish this task</p></li>
+<li><p><strong>func</strong> – function to use in the process pool. This is self.parse</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-core">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-core" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="search_svc.html" class="btn btn-neutral float-right" title="search_svc package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to AIOGET" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, E.S.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

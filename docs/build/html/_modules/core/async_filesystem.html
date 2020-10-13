@@ -1,0 +1,431 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>core.async_filesystem &mdash; aioget 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> aioget
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">core</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/core.html">core package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">search service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/search_svc.html">search_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">download service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/download_svc.html">download_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">parser service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/parser_svc.html">parser_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/modules.html">parser_svc</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aioget</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>core.async_filesystem</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for core.async_filesystem</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Linux-based File System for saving/searching/loading files</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">from</span> <span class="nn">core</span> <span class="kn">import</span> <span class="n">async_write</span><span class="p">,</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">ByteString</span>
+
+<span class="n">basiclogger</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">rabbit_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="c1"># def _encode_filepath(fs: str, date: str, url: str):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Encodes file path and makes dirs for the filesystem with FS:/date/url</span>
+<span class="c1">#</span>
+<span class="c1">#     Args:</span>
+<span class="c1">#         fs (str): Top of the filesystem directory, path or directory name</span>
+<span class="c1">#         date (str): string. date in YYYY-MM-DD (with or without delimiter is fine)</span>
+<span class="c1">#         url (str): url string to be encoded</span>
+<span class="c1">#</span>
+<span class="c1">#     Returns:</span>
+<span class="c1">#         Encoded file_path</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#     .. todo:: handle .asp and .aspx webpage where end result could be url/url/url.aspx.html</span>
+<span class="c1">#</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#     folder = re.sub(&#39;\W+&#39;, &#39;&#39;, date)[:8]</span>
+<span class="c1">#     path = f&#39;{fs}/{folder}/&#39;</span>
+<span class="c1">#     create_fs(path)</span>
+<span class="c1">#</span>
+<span class="c1">#     file_path = path + url.lower().replace(&#39;/&#39;, &#39;I&#39;)</span>
+<span class="c1">#     file_path = file_path[:min(250, len(file_path))]</span>
+<span class="c1">#</span>
+<span class="c1">#     # TODO  handle .asp and .aspx webpage where end result could be url/url/url.aspx.html</span>
+<span class="c1">#     if not file_path.endswith(&#39;.html&#39;) and not file_path.endswith(&#39;.htm&#39;):</span>
+<span class="c1">#         file_path += &#39;.html&#39;</span>
+<span class="c1">#     return file_path</span>
+
+
+<span class="c1"># def _decode_filepath(url: str):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Decodes a url by:</span>
+<span class="c1">#         1. Lowering all chars in the string</span>
+<span class="c1">#         2. replacing all &#39;/&#39; with &#39;I&#39;</span>
+<span class="c1">#         3. picks the min(250 chars, length of url string)</span>
+<span class="c1">#         4. appending .html to any url that does not end with .html or htm</span>
+<span class="c1">#</span>
+<span class="c1">#     Args:</span>
+<span class="c1">#         url (str):</span>
+<span class="c1">#</span>
+<span class="c1">#     Returns:</span>
+<span class="c1">#         decoded url string</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     html = url.lower().replace(&#39;/&#39;, &#39;I&#39;)</span>
+<span class="c1">#     html = html[:min(250, len(html))]</span>
+<span class="c1">#     if not html.endswith(&#39;.html&#39;) and not html.endswith(&#39;.htm&#39;):</span>
+<span class="c1">#         html += &#39;.html&#39;</span>
+<span class="c1">#     return html</span>
+
+
+<div class="viewcode-block" id="create_fs"><a class="viewcode-back" href="../../modules/core.html#core.async_filesystem.create_fs">[docs]</a><span class="k">def</span> <span class="nf">create_fs</span><span class="p">(</span><span class="n">fs</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a File System directory. If the directory already exists, it does not overwrite the contents.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fs (str): path or directory name</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<span class="c1"># def exists_file(fs: str, url: str, use_glob: bool = False):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Checks if a url is already saved to the filesystem and returns True or False</span>
+<span class="c1">#</span>
+<span class="c1">#     Args:</span>
+<span class="c1">#         fs (str): Top of the filesystem directory, path or directory name</span>
+<span class="c1">#         url (str): url str to check in the filesystem. It is decoded using _decode_filepath(url)</span>
+<span class="c1">#         use_glob (bool): whether to use `glob` (True) instead of linux `find`. Default False</span>
+<span class="c1">#</span>
+<span class="c1">#     Returns:</span>
+<span class="c1">#         True or False if url exists in the filesystem</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     if not url:</span>
+<span class="c1">#         # case of passing empty string as url,</span>
+<span class="c1">#         return False</span>
+<span class="c1">#     # print(url)</span>
+<span class="c1">#     url = _decode_filepath(url)</span>
+<span class="c1">#</span>
+<span class="c1">#     if not use_glob:</span>
+<span class="c1">#         proc = subprocess.Popen([&#39;/usr/bin/find&#39;, f&#39;{fs}/*/{url}&#39;], stdout=subprocess.PIPE,</span>
+<span class="c1">#                                 stderr=subprocess.DEVNULL, shell=True)</span>
+<span class="c1">#         (out, err) = proc.communicate()</span>
+<span class="c1">#</span>
+<span class="c1">#         if out == b&#39;&#39;:</span>
+<span class="c1">#             return False</span>
+<span class="c1">#         return True</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         out = glob.glob(f&#39;{fs}/*/{url}&#39;)</span>
+<span class="c1">#         if out:</span>
+<span class="c1">#             return True</span>
+<span class="c1">#         # print(&#39;ALREADY EXISTS&#39;,out)</span>
+<span class="c1">#         return False</span>
+
+
+<span class="c1"># def get_filepath(fs: str, url: str) -&gt; Union[str, bytes]:</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Decodes the url, and opens up a subprocess to run find on the url in the filesystem under fs/\*/decoded_url</span>
+<span class="c1">#     Args:</span>
+<span class="c1">#         fs (str): Top of the filesystem directory, path or directory name</span>
+<span class="c1">#         url (str): url str to check in the filesystem. It is decoded using _decode_filepath(url)</span>
+<span class="c1">#</span>
+<span class="c1">#     Returns:</span>
+<span class="c1">#         File path if found, else None</span>
+<span class="c1">#</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     url = _decode_filepath(url)</span>
+<span class="c1">#     # check the path to the find function, sometimes its /bin/find</span>
+<span class="c1">#     proc = subprocess.Popen(&#39;/usr/bin/find &#39; + fs + &#39;/*/&#39; + url + &#39; 2&gt;/dev/null&#39;, stdout=subprocess.PIPE, shell=True)</span>
+<span class="c1">#     (out, err) = proc.communicate()</span>
+<span class="c1">#     return out</span>
+
+
+<span class="c1"># def load_file(fs: str, url: str):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     `cats` a file from filesystem using /bin/cat</span>
+<span class="c1">#</span>
+<span class="c1">#     Args:</span>
+<span class="c1">#         fs (str): Top of the filesystem directory, path or directory name</span>
+<span class="c1">#         url (str): url str to check in the filesystem. It is decoded using _decode_filepath(url)</span>
+<span class="c1">#</span>
+<span class="c1">#     Returns:</span>
+<span class="c1">#         text of file if found.</span>
+<span class="c1">#</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     url = _decode_filepath(url)</span>
+<span class="c1">#     proc = subprocess.Popen(&#39;/bin/cat &#39; + fs + &#39;/*/&#39; + url + &#39; 2&gt;/dev/null&#39;, stdout=subprocess.PIPE, shell=True)</span>
+<span class="c1">#     (out, err) = proc.communicate()</span>
+<span class="c1">#     return out</span>
+
+
+<div class="viewcode-block" id="save_file"><a class="viewcode-back" href="../../modules/core.html#core.async_filesystem.save_file">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">save_file</span><span class="p">(</span><span class="n">fpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">html</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ByteString</span><span class="p">],</span> <span class="n">encoding</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> \
+        <span class="n">Union</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Encodes the filepath and saves the html using async_write</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        fpath (str): Top of the filesystem directory, path or directory name</span>
+<span class="sd">        date (str): date in YYYY-MM-DD (with or without delimiter is fine). Directory will be created one level down</span>
+<span class="sd">        from fs</span>
+<span class="sd">        url (str): url str to check in the filesystem. It is decoded using _decode_filepath(url)</span>
+<span class="sd">        html (str or bytes): html response string to be written</span>
+<span class="sd">        encoding (str):</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        path string if written, and False if Exception was raised.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># path = _encode_filepath(fs, date, url)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">save_type</span> <span class="o">=</span> <span class="s1">&#39;w&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">save_type</span> <span class="o">=</span> <span class="s1">&#39;wb&#39;</span>
+        <span class="k">await</span> <span class="n">async_write</span><span class="o">.</span><span class="n">write_data</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">save_type</span><span class="p">,</span> <span class="n">encoding</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">basiclogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fpath</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">exc</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">fpath</span></div>
+
+
+<span class="c1"># def search_fs(fs: str, query: str):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Performs a linux &#39;grep&#39; using a query on the filesystem</span>
+<span class="c1">#</span>
+<span class="c1">#     Args:</span>
+<span class="c1">#         fs (str): Top of the filesystem directory, path or directory name</span>
+<span class="c1">#         query (str): string like grep query</span>
+<span class="c1">#</span>
+<span class="c1">#     Returns:</span>
+<span class="c1">#         results of grep query</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#     .. todo:: todo line below needs to be generalized for LOB, etc.</span>
+<span class="c1">#</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     proc = subprocess.Popen(&#39;/bin/grep -s -R -i &quot;&#39; + query + &#39;&quot; &#39; + fs + &#39;/*&#39;, stdout=subprocess.PIPE, shell=True)</span>
+<span class="c1">#     (out, err) = proc.communicate()</span>
+<span class="c1">#     A = {}</span>
+<span class="c1">#     for record in str(out).strip().split(&#39;\\n&#39;)[:-1]:</span>
+<span class="c1">#         fields = record.split(&#39;|&#39;)</span>
+<span class="c1">#         url = fields[0]</span>
+<span class="c1">#         if url.startswith(&#39;b&quot;&#39;):</span>
+<span class="c1">#             url = url[2:]</span>
+<span class="c1">#         if url.startswith(&#39;b\&#39;&#39;):</span>
+<span class="c1">#             url = url[2:]</span>
+<span class="c1">#         url = &#39;:&#39;.join(url.split(&#39;:&#39;)[:-1])</span>
+<span class="c1">#         # todo line below needs to be generalized for LOB, etc.</span>
+<span class="c1">#         url = url.replace(&#39;sentiment/&#39;, &#39;pages/&#39;)</span>
+<span class="c1">#         info = fields[1:]</span>
+<span class="c1">#         if not url in A:  # if test for membership, then this should be if url not in A</span>
+<span class="c1">#             A[url] = []</span>
+<span class="c1">#         A[url].append(info)</span>
+<span class="c1">#</span>
+<span class="c1">#     results = []</span>
+<span class="c1">#     for url in A:</span>
+<span class="c1">#         for rec in A[url]:</span>
+<span class="c1">#             results.append([url] + rec)</span>
+<span class="c1">#     return results</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, E.S.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

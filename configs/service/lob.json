@@ -1,0 +1,8 @@
+{
+  "redis_db_params": {
+    "host": "redis",
+    "port": 6379,
+    "db":  3
+  },
+  "file_system_path": "lobs"
+}

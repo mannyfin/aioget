@@ -1,0 +1,11 @@
+{
+  "media": {
+            "url_fixer": "parser_scripts.news_media.filter_adjust_url"
+  },
+  "line_of_business": {
+                       "url_fixer": "parser_scripts.lob_webpages.filter_adjust_url"
+  },
+  "sja": {
+          "url_fixer": "parser_scripts.panjiva.filter_adjust_url"
+  }
+}

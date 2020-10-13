@@ -1,0 +1,378 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>core.rabbitmq_router &mdash; aioget 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> aioget
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">core</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/core.html">core package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">search service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/search_svc.html">search_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">download service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/download_svc.html">download_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">parser service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/parser_svc.html">parser_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/modules.html">parser_svc</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aioget</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>core.rabbitmq_router</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for core.rabbitmq_router</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Helper functions for using RabbitMQ</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">import</span> <span class="nn">pika</span>
+
+<span class="kn">from</span> <span class="nn">configs.base.consts</span> <span class="kn">import</span> <span class="n">ASYNC_SLEEP</span>
+<span class="kn">from</span> <span class="nn">configs.base.rabbit_connection</span> <span class="kn">import</span> <span class="n">RABBITMQ_HOST</span><span class="p">,</span> <span class="n">RABBITMQ_PORT</span><span class="p">,</span> <span class="n">RABBIT_USER</span><span class="p">,</span> <span class="n">RABBIT_PW</span>
+
+<span class="kn">from</span> <span class="nn">sys</span> <span class="kn">import</span> <span class="n">platform</span>
+<span class="k">if</span> <span class="n">platform</span> <span class="o">!=</span> <span class="s1">&#39;win32&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">uvloop</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop_policy</span><span class="p">(</span><span class="n">uvloop</span><span class="o">.</span><span class="n">EventLoopPolicy</span><span class="p">())</span>
+
+
+<div class="viewcode-block" id="connect_to_message_exchange"><a class="viewcode-back" href="../../modules/core.html#core.rabbitmq_router.connect_to_message_exchange">[docs]</a><span class="k">def</span> <span class="nf">connect_to_message_exchange</span><span class="p">(</span><span class="n">host</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">RABBITMQ_HOST</span><span class="p">,</span> <span class="n">exchange_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;message&#39;</span><span class="p">,</span>
+                                <span class="n">exchange_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;topic&#39;</span><span class="p">,</span> <span class="n">consumer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">prefetch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+                                <span class="n">port</span><span class="o">=</span><span class="n">RABBITMQ_PORT</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make connection to an exchange using a Blocking Connection.</span>
+<span class="sd">    .. todo: change to use async</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        port:</span>
+<span class="sd">        prefetch:</span>
+<span class="sd">        consumer:</span>
+<span class="sd">        host:</span>
+<span class="sd">        exchange_name:</span>
+<span class="sd">        exchange_type:</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        connection: connection to channel (used for when you want to do connection.close()</span>
+<span class="sd">        channel: connection channel (used to publish/consume messages to/from exchange)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># print(host) #prints the hostname rabbit</span>
+    <span class="n">credentials</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">PlainCredentials</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">RABBIT_USER</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">RABBIT_PW</span><span class="p">)</span>
+    <span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span><span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">credentials</span><span class="o">=</span><span class="n">credentials</span><span class="p">,</span>
+                                                                   <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+    <span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+    <span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span><span class="o">=</span><span class="n">exchange_name</span><span class="p">,</span> <span class="n">exchange_type</span><span class="o">=</span><span class="n">exchange_type</span><span class="p">,</span> <span class="n">durable</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">consumer</span><span class="p">:</span>
+        <span class="n">channel</span><span class="o">.</span><span class="n">basic_qos</span><span class="p">(</span><span class="n">prefetch_count</span><span class="o">=</span><span class="n">prefetch</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">connection</span><span class="p">,</span> <span class="n">channel</span></div>
+
+
+<div class="viewcode-block" id="create_queue"><a class="viewcode-back" href="../../modules/core.html#core.rabbitmq_router.create_queue">[docs]</a><span class="k">def</span> <span class="nf">create_queue</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">queue_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">exclusive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">durable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">queue_name</span><span class="p">,</span> <span class="n">exclusive</span><span class="o">=</span><span class="n">exclusive</span><span class="p">,</span> <span class="n">durable</span><span class="o">=</span><span class="n">durable</span><span class="p">,</span> <span class="n">auto_delete</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">queue</span></div>
+
+
+<div class="viewcode-block" id="bind_queue_to_exchange"><a class="viewcode-back" href="../../modules/core.html#core.rabbitmq_router.bind_queue_to_exchange">[docs]</a><span class="k">def</span> <span class="nf">bind_queue_to_exchange</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">exchange_name</span><span class="p">,</span> <span class="n">queue_name</span><span class="p">,</span> <span class="n">routing_key</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">channel</span><span class="o">.</span><span class="n">queue_bind</span><span class="p">(</span><span class="n">exchange</span><span class="o">=</span><span class="n">exchange_name</span><span class="p">,</span> <span class="n">queue</span><span class="o">=</span><span class="n">queue_name</span><span class="p">,</span> <span class="n">routing_key</span><span class="o">=</span><span class="n">routing_key</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="publish_message_to_exchange"><a class="viewcode-back" href="../../modules/core.html#core.rabbitmq_router.publish_message_to_exchange">[docs]</a><span class="k">def</span> <span class="nf">publish_message_to_exchange</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">exchange</span><span class="p">,</span> <span class="n">routing_key</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">channel</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">channel</span><span class="o">.</span><span class="n">is_open</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">headers</span><span class="p">:</span>
+            <span class="n">headers</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># {&#39;a&#39;: &#39;b&#39;, &#39;c&#39;: &#39;d&#39;, &#39;e&#39;: &#39;f&#39;}</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BasicProperties</span><span class="p">(</span><span class="n">app_id</span><span class="o">=</span><span class="s1">&#39;data_collect&#39;</span><span class="p">,</span>
+                                          <span class="n">content_type</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+                                          <span class="n">delivery_mode</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># make message persistent</span>
+                                          <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+                                          <span class="p">)</span>
+        <span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span><span class="n">exchange</span><span class="o">=</span><span class="n">exchange</span><span class="p">,</span>
+                              <span class="n">routing_key</span><span class="o">=</span><span class="n">routing_key</span><span class="p">,</span>
+                              <span class="n">body</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                              <span class="n">properties</span><span class="o">=</span><span class="n">properties</span><span class="p">,</span>
+                              <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="consume_items_from_rabbitmq"><a class="viewcode-back" href="../../modules/core.html#core.rabbitmq_router.consume_items_from_rabbitmq">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">consume_items_from_rabbitmq</span><span class="p">(</span><span class="n">queue</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">queue_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">inactivity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">0.001</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Consumes items from a RabbitMQ Queue and puts the items onto an asyncio.Queue for consumption by a Service</span>
+<span class="sd">    Runs forever.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        queue: asyncio.Queue</span>
+<span class="sd">        channel: pika.BlockingConnection().channel() object</span>
+<span class="sd">        queue_name (str): name of a bound queue</span>
+<span class="sd">        inactivity (int): timeout in s</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ASYNC_SLEEP</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">method_frame</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span> <span class="ow">in</span> <span class="n">channel</span><span class="o">.</span><span class="n">consume</span><span class="p">(</span><span class="n">queue_name</span><span class="p">,</span> <span class="n">inactivity_timeout</span><span class="o">=</span><span class="n">inactivity</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">method_frame</span><span class="p">:</span>
+                    <span class="c1"># print(body)</span>
+                    <span class="k">while</span> <span class="n">queue</span><span class="o">.</span><span class="n">full</span><span class="p">():</span>
+                        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ASYNC_SLEEP</span><span class="p">)</span>
+                    <span class="c1"># await queue.put(body)</span>
+                    <span class="n">queue</span><span class="o">.</span><span class="n">put_nowait</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+                    <span class="c1"># Acknowledge the message</span>
+                    <span class="n">channel</span><span class="o">.</span><span class="n">basic_ack</span><span class="p">(</span><span class="n">method_frame</span><span class="o">.</span><span class="n">delivery_tag</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># empty remaining items from queue</span>
+                    <span class="k">while</span> <span class="n">queue</span><span class="o">.</span><span class="n">qsize</span><span class="p">():</span>
+                        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ASYNC_SLEEP</span><span class="p">)</span>
+                    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ASYNC_SLEEP</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+
+        <span class="n">requeued_messages</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="publish_items_to_rabbitmq"><a class="viewcode-back" href="../../modules/core.html#core.rabbitmq_router.publish_items_to_rabbitmq">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">publish_items_to_rabbitmq</span><span class="p">(</span><span class="n">queue</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">exchange_name</span><span class="p">,</span> <span class="n">routing_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Do not supply routing key parameter if you are publishing to multiple queues. If so, then the message should be</span>
+<span class="sd">    of the format:</span>
+
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        :linenos:</span>
+
+<span class="sd">        msg = {&#39;routing_key&#39;: routing.key,</span>
+<span class="sd">               &#39;body&#39;: {&#39;keys&#39;: &#39;values&#39;}</span>
+<span class="sd">               }</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        queue:</span>
+<span class="sd">        channel:</span>
+<span class="sd">        exchange_name:</span>
+<span class="sd">        routing_key:</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ASYNC_SLEEP</span><span class="p">)</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">queue</span><span class="o">.</span><span class="n">empty</span><span class="p">():</span>
+            <span class="c1"># if not queue.empty():</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
+                <span class="c1"># msg = await queue.get()</span>
+                <span class="k">if</span> <span class="s1">&#39;exit_routing_key&#39;</span> <span class="ow">in</span> <span class="n">msg</span> <span class="ow">and</span> <span class="s1">&#39;body&#39;</span> <span class="ow">in</span> <span class="n">msg</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">routing_key</span><span class="p">:</span>
+                    <span class="n">publish_message_to_exchange</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span>
+                                                <span class="n">exchange_name</span><span class="p">,</span>
+                                                <span class="n">routing_key</span><span class="o">=</span><span class="n">msg</span><span class="p">[</span><span class="s1">&#39;exit_routing_key&#39;</span><span class="p">],</span>
+                                                <span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">publish_message_to_exchange</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span>
+                                                <span class="n">exchange_name</span><span class="p">,</span>
+                                                <span class="n">routing_key</span><span class="o">=</span><span class="n">routing_key</span><span class="p">,</span>
+                                                <span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
+                <span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
+
+    <span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, E.S.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

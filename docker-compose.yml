@@ -1,0 +1,150 @@
+version: "3.8"
+
+services:
+
+  rabbit:
+    image: rabbitmq:3-management
+    hostname: lagomorpha_leporidae
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+#      consider putting these in docker secrets in production
+      RABBITMQ_ERLANG_COOKIE: '74f1548cf11d441e8676ef0d18e54a9b'
+      RABBITMQ_DEFAULT_USER: "aioget"
+      RABBITMQ_DEFAULT_PASS: "wA66iT_wa6617"
+#    healthcheck:
+#      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+#      interval: 5s
+#      timeout: 15s
+#      retries: 1
+  redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+
+  search_service:
+#    image: dcbase
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: search_svc
+#    network: host
+#    image: searchdocker images_service
+    working_dir: /aioget/
+    volumes:
+      - ./:/aioget
+    depends_on:
+      - rabbit
+      - redis
+    restart: always
+    command: ["python", "search_svc/search_service_driver.py"]
+
+
+  download_service:
+#    image: dcbase
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: download_svc
+    working_dir: /aioget/
+    volumes:
+      - ./:/aioget
+#      - type: volume
+#        source: pages
+#        target: /pages
+#      - type: volume
+#        source: images
+#        target: /images
+
+
+    depends_on:
+      - rabbit
+      - redis
+    restart: always
+    command: ["python", "download_svc/download_service_driver.py"]
+
+  parser_service:
+#    image: dcbase
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: parser_svc
+    working_dir: /aioget/
+    volumes:
+      - ./:/aioget
+    depends_on:
+      - rabbit
+      - redis
+    restart: always
+    command: ["python", "parser_svc/parser_service_driver.py"]
+
+
+#  sja_service:
+#    image: dcbase
+#    working_dir: /data_collection/src
+#    volumes:
+#      - ./:/data_collection
+#    depends_on:
+#      - rabbit
+#      - redis
+#    restart: always
+#    command: ["python", "sja_service_driver.py"]
+
+#  lob_service:
+#    image: dcbase
+#    working_dir: /data_collection/src
+#    volumes:
+#      - ./:/data_collection
+#    depends_on:
+#      - rabbit
+#      - redis
+#    restart: always
+#    command: ["python", "lob_service_driver.py"]
+
+#  relationships_service:
+#    image: dcbase
+#    working_dir: /data_collection/src
+#    volumes:
+#      - ./:/data_collection
+#    depends_on:
+#      - rabbit
+#      - redis
+#    restart: always
+#    command: ["python", "relationships_service_driver.py"]
+
+  logger_filter_info_debug:
+#    image: dcbase
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: logging_svc
+    working_dir: /aioget/
+    volumes:
+      - ./:/aioget
+    depends_on:
+      - rabbit
+      - redis
+    restart: always
+    command: ["python", "logging_svc/logging_service.py", 'logger_debug', '#.INFO', '#.DEBUG']
+
+  logger_filter_errors:
+#    image: dcbase
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: logging_svc
+    working_dir: /aioget/
+    volumes:
+      - ./:/aioget
+    depends_on:
+      - rabbit
+      - redis
+    restart: always
+    command: ["python", "logging_svc/logging_service.py", 'logger_error', '#.ERROR', '#.WARNING', '#.CRITICAL']
+
+volumes:
+  redis-data:

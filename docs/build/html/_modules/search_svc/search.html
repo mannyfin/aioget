@@ -1,0 +1,888 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>search_svc.search &mdash; aioget 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> aioget
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">core</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/core.html">core package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">search service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/search_svc.html">search_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">download service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/download_svc.html">download_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">parser service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/parser_svc.html">parser_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/modules.html">parser_svc</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aioget</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>search_svc.search</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for search_svc.search</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">aiohttp.client</span> <span class="kn">import</span> <span class="n">ClientSession</span><span class="p">,</span> <span class="n">TCPConnector</span>
+<span class="kn">import</span> <span class="nn">redis</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;/..&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">configs.base.consts</span> <span class="kn">import</span> <span class="n">CONFIG_DIR</span><span class="p">,</span> <span class="n">ASYNC_SLEEP</span>
+<span class="kn">from</span> <span class="nn">core</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">core</span> <span class="kn">import</span> <span class="n">async_queue</span><span class="p">,</span> <span class="n">filtration</span><span class="p">,</span> <span class="n">async_write</span>
+<span class="kn">from</span> <span class="nn">core.async_requests</span> <span class="kn">import</span> <span class="n">AsyncHttpRequests</span>
+<span class="kn">from</span> <span class="nn">core.utils</span> <span class="kn">import</span> <span class="n">load_config</span><span class="p">,</span> <span class="n">parse_consumer</span><span class="p">,</span> <span class="n">make_config</span><span class="p">,</span> <span class="n">pop_arb_field_if_exists</span><span class="p">,</span> <span class="n">set_arb</span>
+<span class="kn">from</span> <span class="nn">parser_scripts</span> <span class="kn">import</span> <span class="n">google</span><span class="p">,</span> <span class="n">googlenews</span>
+
+
+<span class="kn">from</span> <span class="nn">sys</span> <span class="kn">import</span> <span class="n">platform</span>
+<span class="k">if</span> <span class="n">platform</span> <span class="o">!=</span> <span class="s1">&#39;win32&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">uvloop</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop_policy</span><span class="p">(</span><span class="n">uvloop</span><span class="o">.</span><span class="n">EventLoopPolicy</span><span class="p">())</span>
+
+
+<span class="n">basiclogger</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">rabbit_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="c1"># todo or_combine_sites param -&gt; lob searches -&gt; measure perf impact</span>
+
+<div class="viewcode-block" id="SearchService"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService">[docs]</a><span class="k">class</span> <span class="nc">SearchService</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The Search Service is a generic class that is used by any process in order to accept search inputs (e.g. search</span>
+<span class="sd">    terms, keywords, sites, etc.), perform searches, and pass the results to another service. The Search Service</span>
+<span class="sd">    implements a search query generator + async http requests + webpage Data Parser (google or googlenews) + async</span>
+<span class="sd">    write to write outputs to a file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">SEARCH_SERVICE_CONFIG_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CONFIG_DIR</span><span class="p">,</span> <span class="s1">&#39;service&#39;</span><span class="p">,</span> <span class="s1">&#39;search.json&#39;</span><span class="p">))</span>  <span class="c1"># Proxy info, search sites, etc.</span>
+    <span class="n">BUSINESS_CONFIGS_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CONFIG_DIR</span><span class="p">,</span> <span class="s1">&#39;business_drivers&#39;</span><span class="p">,</span> <span class="s1">&#39;search&#39;</span><span class="p">))</span>  <span class="c1"># NegMedia/SJA/LOB/etc</span>
+    <span class="n">CLIENT_CONFIGS_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CONFIG_DIR</span><span class="p">,</span> <span class="s1">&#39;client&#39;</span><span class="p">))</span>
+
+    <span class="n">BUSINESS_CONFIGS_PATHS</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BUSINESS_CONFIGS_DIR</span><span class="p">,</span> <span class="s1">&#39;*.json&#39;</span><span class="p">))</span>
+    <span class="n">CLIENT_CONFIGS_PATHS</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CLIENT_CONFIGS_DIR</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;*.json&#39;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_queue</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">,</span> <span class="n">publish_queue</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            input_queue:</span>
+<span class="sd">            publish_queue:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service_configs</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SEARCH_SERVICE_CONFIG_PATH</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">business_configs</span> <span class="o">=</span> <span class="n">make_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BUSINESS_CONFIGS_PATHS</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client_configs</span> <span class="o">=</span> <span class="n">make_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CLIENT_CONFIGS_PATHS</span><span class="p">)</span>
+        <span class="c1"># todo pass in only the required params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">async_http_requests</span> <span class="o">=</span> <span class="n">AsyncHttpRequests</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">service_configs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_queue</span> <span class="o">=</span> <span class="n">input_queue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publish_queue</span> <span class="o">=</span> <span class="n">publish_queue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_refresh</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="c1">##################3</span>
+        <span class="c1"># self.service_configs[&#39;redis_db_params&#39;][&#39;host&#39;] = &#39;localhost&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">search_history</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">service_configs</span><span class="p">[</span><span class="s1">&#39;redis_db_params&#39;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="SearchService.start"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Starts the Search Service by creating a worker daemons for each number of TCP connections for the desired</span>
+<span class="sd">        concurrency. After a worker completes a url request, it sends the response to a webpage parser, which extracts</span>
+<span class="sd">        the urls. Finally, the extracted urls are individually placed on messages for another service.</span>
+
+<span class="sd">        Issues are saved in an audit file for review</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            workers, queues, session</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># use an intermediate queue here to limit number of messages waiting in the service.</span>
+        <span class="n">query_queue</span> <span class="o">=</span> <span class="n">async_queue</span><span class="o">.</span><span class="n">get_queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+        <span class="n">parse_queue</span> <span class="o">=</span> <span class="n">async_queue</span><span class="o">.</span><span class="n">get_queue</span><span class="p">()</span>
+        <span class="n">write_queue</span> <span class="o">=</span> <span class="n">async_queue</span><span class="o">.</span><span class="n">get_queue</span><span class="p">()</span>
+
+        <span class="c1"># async with ClientSession(connector=TCPConnector(limit=self.async_http_requests.connections, ssl=False)) as \</span>
+        <span class="c1">#         session:</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="n">ClientSession</span><span class="p">(</span><span class="n">connector</span><span class="o">=</span><span class="n">TCPConnector</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">async_http_requests</span><span class="o">.</span><span class="n">connections</span><span class="p">,</span> <span class="n">ssl</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="n">workers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">async_http_requests</span><span class="o">.</span><span class="n">connections</span><span class="p">):</span>
+            <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">put_onto_query_queue</span><span class="p">(</span><span class="n">query_queue</span><span class="p">)</span>
+                                       <span class="p">)</span>
+            <span class="n">workers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+            <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">async_queue</span><span class="o">.</span><span class="n">worker</span><span class="p">(</span><span class="n">query_queue</span><span class="p">,</span> <span class="n">parse_queue</span><span class="p">,</span>
+                                                          <span class="bp">self</span><span class="o">.</span><span class="n">async_http_requests</span><span class="o">.</span><span class="n">handle_requests</span><span class="p">,</span>
+                                                          <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
+                                                          <span class="p">)</span>
+                                       <span class="p">)</span>
+            <span class="n">workers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">parse_consumer</span><span class="p">(</span><span class="n">next_queue</span><span class="o">=</span><span class="n">parse_queue</span><span class="p">,</span> <span class="n">write_queue</span><span class="o">=</span><span class="n">write_queue</span><span class="p">,</span>
+                                                  <span class="p">))</span>
+        <span class="n">workers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+
+        <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_consumer</span><span class="p">(</span><span class="n">audit_path</span><span class="o">=</span><span class="s1">&#39;audit.txt&#39;</span><span class="p">,</span> <span class="n">write_queue</span><span class="o">=</span><span class="n">write_queue</span><span class="p">,</span> <span class="n">publish_queue</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">publish_queue</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="n">workers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+
+        <span class="n">queues</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">input_queue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">publish_queue</span><span class="p">,</span> <span class="n">query_queue</span><span class="p">,</span> <span class="n">parse_queue</span><span class="p">,</span> <span class="n">write_queue</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">workers</span><span class="p">,</span> <span class="n">queues</span><span class="p">,</span> <span class="n">session</span></div>
+
+<div class="viewcode-block" id="SearchService.put_onto_query_queue"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService.put_onto_query_queue">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">put_onto_query_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query_queue</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Takes a message off of the input queue. Extracts the query and the service/business/client configuration and</span>
+<span class="sd">        places it on the query queue</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            query_queue:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ASYNC_SLEEP</span><span class="p">)</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_queue</span><span class="o">.</span><span class="n">qsize</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">query_queue</span><span class="o">.</span><span class="n">full</span><span class="p">():</span>
+                        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ASYNC_SLEEP</span><span class="p">)</span>
+                        <span class="k">continue</span>
+                    <span class="c1"># if self.input_queue.qsize():</span>
+                    <span class="n">message</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+                        <span class="n">message</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+                    <span class="n">basiclogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+                    <span class="n">entity</span><span class="p">,</span> <span class="n">business_configuration</span><span class="p">,</span> <span class="n">client_search_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_configuration</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+                    <span class="n">query_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_assign_query_gen_inputs</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">business_configuration</span><span class="p">,</span> <span class="n">client_search_configs</span><span class="p">)</span>
+
+                    <span class="n">arb_fields</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="n">pop_arb_field_if_exists</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+                    <span class="n">parse</span> <span class="o">=</span> <span class="n">google</span><span class="o">.</span><span class="n">parse</span> <span class="k">if</span> <span class="s1">&#39;google&#39;</span> <span class="o">==</span> <span class="n">business_configuration</span><span class="p">[</span><span class="s1">&#39;service&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">googlenews</span><span class="o">.</span><span class="n">parse</span>
+                    <span class="c1"># construct query from message fields and configs</span>
+                    <span class="k">for</span> <span class="n">query</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query_gen</span><span class="p">(</span><span class="n">business_configuration</span><span class="p">,</span> <span class="o">**</span><span class="n">query_params</span><span class="p">):</span>
+                        <span class="n">query</span><span class="p">[</span><span class="s1">&#39;parse_func&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parse</span>
+                        <span class="n">query</span><span class="p">[</span><span class="s1">&#39;client&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;client&#39;</span><span class="p">]</span>
+                        <span class="n">query</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">]</span>
+
+                        <span class="c1"># add any arb fields.</span>
+                        <span class="n">query</span> <span class="o">=</span> <span class="n">set_arb</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">arb</span><span class="o">=</span><span class="n">arb_fields</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="n">filtration</span><span class="o">.</span><span class="n">filter_entities_redis</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">query</span><span class="p">[</span><span class="s1">&#39;language&#39;</span><span class="p">],</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">],</span>
+                                                            <span class="bp">self</span><span class="o">.</span><span class="n">business_configs</span><span class="p">[</span><span class="s1">&#39;search&#39;</span><span class="p">][</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">]][</span><span class="s1">&#39;refresh_period&#39;</span><span class="p">],</span>
+                                                            <span class="bp">self</span><span class="o">.</span><span class="n">search_history</span><span class="p">):</span>
+                            <span class="k">await</span> <span class="n">query_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">basiclogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;entity combo searched recently: </span><span class="si">{</span><span class="n">entity</span><span class="si">}</span><span class="s2">|&quot;</span>
+                                             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">query</span><span class="p">[</span><span class="s1">&#39;language&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                    <span class="n">basiclogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">input_queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ASYNC_SLEEP</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SearchService.write_consumer"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService.write_consumer">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">write_consumer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">audit_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                             <span class="n">write_queue</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">,</span>
+                             <span class="n">publish_queue</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         used by the Search Service only right now.</span>
+
+<span class="sd">        .. todo:: this could be refactored by async_queue.worker</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            audit_path: path to audit file</span>
+<span class="sd">            publish_queue:</span>
+<span class="sd">            write_queue: asyncio.Queue where each queue item is a list of asyncio.Futures for parsing the responses</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ASYNC_SLEEP</span><span class="p">)</span>
+            <span class="n">futures</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">ctr</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">write_queue</span><span class="o">.</span><span class="n">qsize</span><span class="p">()):</span>
+                <span class="n">futures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">write_queue</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">())</span>
+                <span class="n">write_queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+            <span class="k">while</span> <span class="n">futures</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">):</span>
+                    <span class="n">parsed_output</span> <span class="o">=</span> <span class="k">await</span> <span class="n">_</span>
+
+                    <span class="c1"># await async_write.write_data(output_path, f&quot;{&#39;|&#39;.join(parsed_output[&#39;parsed_output&#39;])}\n&quot;, &#39;a&#39;,</span>
+                    <span class="c1">#                              encoding=None)</span>
+
+                    <span class="n">regexp_entity</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\W+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">parsed_output</span><span class="p">[</span><span class="s1">&#39;entity&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+                    <span class="c1"># popping any arb field so it doesn&#39;t get saved in the search history</span>
+                    <span class="n">arb_field</span><span class="p">,</span> <span class="n">parsed_output</span> <span class="o">=</span> <span class="n">pop_arb_field_if_exists</span><span class="p">(</span><span class="n">parsed_output</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">search_history</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">regexp_entity</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">parsed_output</span><span class="p">[</span><span class="s1">&#39;language&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">parsed_output</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">parsed_output</span><span class="p">))</span>
+
+                    <span class="k">if</span> <span class="n">publish_queue</span> <span class="ow">and</span> <span class="n">parsed_output</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="c1"># if no articles were found with the search, don&#39;t publish a message.</span>
+                            <span class="k">if</span> <span class="s1">&#39;urls&#39;</span> <span class="ow">in</span> <span class="n">parsed_output</span> <span class="ow">and</span> <span class="s1">&#39;cache_urls&#39;</span> <span class="ow">in</span> <span class="n">parsed_output</span><span class="p">:</span>
+                                <span class="k">for</span> <span class="n">url</span><span class="p">,</span> <span class="n">cache_url</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">parsed_output</span><span class="p">[</span><span class="s1">&#39;urls&#39;</span><span class="p">],</span> <span class="n">parsed_output</span><span class="p">[</span><span class="s1">&#39;cache_urls&#39;</span><span class="p">]):</span>
+                                    <span class="c1"># check if url or cache_url is garbage</span>
+
+                                    <span class="n">keep_url</span> <span class="o">=</span> <span class="n">filtration</span><span class="o">.</span><span class="n">filter_garbage_url_search_result</span><span class="p">(</span><span class="n">url</span><span class="p">,</span>
+                                                                                           <span class="bp">self</span><span class="o">.</span><span class="n">business_configs</span><span class="p">[</span><span class="s1">&#39;search&#39;</span><span class="p">][</span>
+                                                                                               <span class="n">parsed_output</span><span class="p">[</span>
+                                                                                                   <span class="s1">&#39;business_function&#39;</span><span class="p">]][</span>
+                                                                                               <span class="s1">&#39;url_filter_exclusion_patterns&#39;</span><span class="p">])</span>
+                                    <span class="n">keep_cache_url</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># default if no cache_url present</span>
+                                    <span class="k">if</span> <span class="n">cache_url</span><span class="p">:</span>
+                                        <span class="n">keep_cache_url</span> <span class="o">=</span> <span class="n">filtration</span><span class="o">.</span><span class="n">filter_garbage_url_search_result</span><span class="p">(</span>
+                                            <span class="n">cache_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">business_configs</span><span class="p">[</span><span class="s1">&#39;search&#39;</span><span class="p">][</span><span class="n">parsed_output</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">]][</span><span class="s1">&#39;url_filter_exclusion_patterns&#39;</span><span class="p">]</span>
+                                        <span class="p">)</span>
+
+                                    <span class="k">if</span> <span class="n">keep_url</span> <span class="ow">and</span> <span class="n">keep_cache_url</span><span class="p">:</span>
+                                        <span class="n">msg</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+                                               <span class="s1">&#39;cache_url&#39;</span><span class="p">:</span> <span class="n">cache_url</span><span class="p">,</span>
+                                               <span class="s1">&#39;client&#39;</span><span class="p">:</span> <span class="n">parsed_output</span><span class="p">[</span><span class="s1">&#39;client&#39;</span><span class="p">],</span>
+                                               <span class="s1">&#39;business_function&#39;</span><span class="p">:</span> <span class="n">parsed_output</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">],</span>
+                                               <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">parsed_output</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span>
+                                               <span class="s1">&#39;language&#39;</span><span class="p">:</span> <span class="n">parsed_output</span><span class="p">[</span><span class="s1">&#39;language&#39;</span><span class="p">],</span>
+                                               <span class="s1">&#39;entity&#39;</span><span class="p">:</span> <span class="n">parsed_output</span><span class="p">[</span><span class="s1">&#39;entity&#39;</span><span class="p">]</span>
+                                               <span class="p">}</span>
+                                        <span class="k">if</span> <span class="n">arb_field</span><span class="p">:</span>
+                                            <span class="n">msg</span> <span class="o">=</span> <span class="n">set_arb</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span> <span class="n">arb</span><span class="o">=</span><span class="n">arb_field</span><span class="p">)</span>
+                                        <span class="k">await</span> <span class="n">publish_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">basiclogger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No results found for: </span><span class="si">{</span><span class="n">parsed_output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                            <span class="n">basiclogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
+                            <span class="n">basiclogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;error_parsed_output: </span><span class="si">{</span><span class="n">parsed_output</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="s1">&#39;error&#39;</span> <span class="ow">in</span> <span class="n">parsed_output</span> <span class="ow">and</span> <span class="n">parsed_output</span><span class="p">[</span><span class="s1">&#39;error&#39;</span><span class="p">]:</span>
+                        <span class="k">await</span> <span class="n">async_write</span><span class="o">.</span><span class="n">write_data</span><span class="p">(</span><span class="n">audit_path</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parsed_output</span><span class="p">[</span><span class="s1">&#39;error&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span>
+                                                     <span class="n">encoding</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">futures</span><span class="p">:</span>
+                    <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">futures</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span><span class="o">.</span><span class="n">done</span><span class="p">()]</span></div>
+
+<div class="viewcode-block" id="SearchService._query_gen"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService._query_gen">[docs]</a>    <span class="k">def</span> <span class="nf">_query_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">business_configuration</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Builds a query for Google search. Wraps the entity and the keyword in double quotes. Calls other helper</span>
+<span class="sd">        functions for query creation.</span>
+
+<span class="sd">        - Uses the language class attribute to incorporate language specific component to url.</span>
+<span class="sd">        - The html encoded entities are created using the entities instance attribute called with</span>
+<span class="sd">          the`_encode_make_phrase` method.</span>
+<span class="sd">        - Combines all the keywords with quotes, spaces, and OR if applicable according to or_combine_kw  instance</span>
+<span class="sd">          attribute and calling _encode_keyword_combos method</span>
+<span class="sd">        - Creates `site:website` if websites provided as website</span>
+<span class="sd">          instance attribute, and combines with OR if applicable and calling _encode_site_search method</span>
+<span class="sd">        - Creates date to-from string if date range provided as the date_range instance attribute and calling</span>
+<span class="sd">          ` _encode_date_ranges` method</span>
+<span class="sd">        - Creates keywords_excluded string if they were provided in keywords_excluded</span>
+<span class="sd">          instance attribute and calling _encode_keywords_excluded method.</span>
+
+<span class="sd">        Args: entities (list): Entities list if user wanted to override self.entities</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Generator of dicts of (entity, query, cache_url, retries)</span>
+
+<span class="sd">        Examples:</span>
+
+<span class="sd">            Input:</span>
+<span class="sd">                service = ‘google’</span>
+<span class="sd">                entities = [“Joe Black”]</span>
+<span class="sd">                keywords = {&#39;es&#39;: [“crime”,”launder”]}</span>
+<span class="sd">                or_combine_kw = True</span>
+<span class="sd">                date_range=[&#39;w&#39;]</span>
+<span class="sd">                keywords_exclusion = [&#39;yahoo.com&#39;]</span>
+<span class="sd">                websites = [&#39;bloomberg.com&#39;]</span>
+<span class="sd">                language = &#39;es&#39;</span>
+
+<span class="sd">            Output:</span>
+
+<span class="sd">                Resulting URL:</span>
+<span class="sd">                https://www.google.com/search?safe=strict&amp;q=&quot;Joe Black&quot; AND (&quot;crime&quot; OR &quot;launder&quot;) site:bloomberg.com</span>
+<span class="sd">                -yahoo.com&amp;hl=es-419&amp;gl=US&amp;ceid=US:es-419&amp;tbs=qdr:w</span>
+
+<span class="sd">                Resulting URL (encoded):</span>
+<span class="sd">                &#39;https://www.google.com/search?safe=strict&amp;q=%22Joe+Black%22+AND+%28%22crime%22+OR+%22launder%22%29+site</span>
+<span class="sd">                %3Abloomberg.com%20-yahoo.com&amp;hl=es-419&amp;gl=US&amp;ceid=US:es-419+&amp;tbs=qdr%3Aw&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">entities</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;entity&#39;</span><span class="p">]</span>
+        <span class="c1"># quote = &#39;&quot;&#39;</span>
+        <span class="n">quote</span> <span class="o">=</span> <span class="s1">&#39;%22&#39;</span>
+        <span class="c1"># space = &#39;%20&#39;</span>
+        <span class="n">space</span> <span class="o">=</span> <span class="s1">&#39;+&#39;</span>
+
+        <span class="c1"># self.encoded_excluded_kw = self._encode_keywords_excluded()</span>
+
+        <span class="k">for</span> <span class="n">language</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;language&#39;</span><span class="p">]:</span>
+            <span class="n">start_url</span><span class="p">,</span> <span class="n">host_lang</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_start_url_host_lang</span><span class="p">(</span><span class="n">language</span><span class="p">,</span> <span class="n">business_configuration</span><span class="p">)</span>
+            <span class="n">encoded_excluded_kw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encode_keywords_excluded</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;keywords_excluded&#39;</span><span class="p">][</span><span class="n">language</span><span class="p">])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;or_combine_kw&#39;</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encode_keyword_combos</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">][</span><span class="n">language</span><span class="p">]):</span>
+                        <span class="c1"># todo could also replace US with MX, CL or other spanish speaking country.</span>
+                        <span class="c1">#  Need to assess results though</span>
+                        <span class="k">for</span> <span class="n">web</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encode_site_search</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;websites&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;or_combine_websites&#39;</span><span class="p">]):</span>
+                            <span class="k">for</span> <span class="n">dates</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encode_date_ranges</span><span class="p">([</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;date_range&#39;</span><span class="p">]]):</span>
+                                <span class="n">space2</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">web</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">dates</span> <span class="k">else</span> <span class="s1">&#39;+&#39;</span>
+                                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keyword</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                                    <span class="c1"># search for &quot;ENTITY&quot; keyword_one_word</span>
+                                    <span class="k">yield</span> <span class="p">{</span><span class="s1">&#39;entity&#39;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span>
+                                           <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">start_url</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">_encode_make_phrase</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">space</span><span class="p">)</span><span class="si">}{</span><span class="n">quote</span><span class="si">}</span><span class="s2">&quot;</span>
+                                                  <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">keyword</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">)</span><span class="si">}{</span><span class="n">quote</span><span class="si">}{</span><span class="n">space</span><span class="si">}{</span><span class="n">web</span><span class="si">}{</span><span class="n">space</span><span class="si">}</span><span class="s2">&quot;</span>
+                                                  <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">encoded_excluded_kw</span><span class="si">}{</span><span class="n">host_lang</span><span class="si">}{</span><span class="n">space2</span><span class="si">}{</span><span class="n">dates</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">),</span>
+                                           <span class="s1">&#39;cache_url&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                           <span class="s1">&#39;retries&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                                           <span class="s1">&#39;response_encoding&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                                           <span class="s1">&#39;language&#39;</span><span class="p">:</span> <span class="n">language</span><span class="p">,</span>
+                                           <span class="s1">&#39;proxy_account&#39;</span><span class="p">:</span> <span class="n">business_configuration</span><span class="p">[</span><span class="s1">&#39;proxy_account&#39;</span><span class="p">]</span>
+                                           <span class="p">}</span>
+                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="c1"># search for &quot;ENTITY&quot; &quot;keyword with multiple words&quot;</span>
+                                    <span class="k">yield</span> <span class="p">{</span><span class="s1">&#39;entity&#39;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span>
+                                           <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">start_url</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">_encode_make_phrase</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">space</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                                                  <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">keyword</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">)</span><span class="si">}{</span><span class="n">space</span><span class="si">}{</span><span class="n">web</span><span class="si">}{</span><span class="n">encoded_excluded_kw</span><span class="si">}</span><span class="s2">&quot;</span>
+                                                  <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">host_lang</span><span class="si">}{</span><span class="n">space2</span><span class="si">}{</span><span class="n">dates</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">),</span>
+                                           <span class="s1">&#39;cache_url&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                           <span class="s1">&#39;retries&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                                           <span class="s1">&#39;response_encoding&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                                           <span class="s1">&#39;language&#39;</span><span class="p">:</span> <span class="n">language</span><span class="p">,</span>
+                                           <span class="s1">&#39;proxy_account&#39;</span><span class="p">:</span> <span class="n">business_configuration</span><span class="p">[</span><span class="s1">&#39;proxy_account&#39;</span><span class="p">]</span>
+                                           <span class="p">}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># TODO refactor this</span>
+                <span class="n">open_parens</span> <span class="o">=</span> <span class="s1">&#39;%28&#39;</span>
+                <span class="n">close_parens</span> <span class="o">=</span> <span class="s1">&#39;%29&#39;</span>
+                <span class="c1"># for language in self.language:</span>
+                <span class="n">start_url</span><span class="p">,</span> <span class="n">host_lang</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_start_url_host_lang</span><span class="p">(</span><span class="n">language</span><span class="p">,</span> <span class="n">business_configuration</span><span class="p">)</span>
+
+                <span class="n">OR_keywords</span> <span class="o">=</span> <span class="s1">&#39;(&quot;&#39;</span> <span class="o">+</span> <span class="s1">&#39;&quot; OR &quot;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">][</span><span class="n">language</span><span class="p">]))</span> <span class="o">+</span> <span class="s1">&#39;&quot;)&#39;</span>
+                <span class="c1"># apply html encodings</span>
+                <span class="n">OR_keywords</span> <span class="o">=</span> <span class="n">OR_keywords</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">)</span>\
+                                         <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">,</span> <span class="n">open_parens</span><span class="p">)</span>\
+                                         <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="n">close_parens</span><span class="p">)</span>\
+                                         <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="n">quote</span><span class="p">)</span>
+
+                <span class="c1"># OR_keywords = OR_keywords.replace(&#39; &#39;, &#39;+&#39;)</span>
+                <span class="c1"># OR_keywords = OR_keywords.replace(&#39;(&#39;, open_parens)</span>
+                <span class="c1"># OR_keywords = OR_keywords.replace(&#39;)&#39;, close_parens)</span>
+                <span class="c1"># OR_keywords = OR_keywords.replace(&#39;&quot;&#39;, quote)</span>
+
+                <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">web</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encode_site_search</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;websites&#39;</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;or_combine_websites&#39;</span><span class="p">]):</span>
+                        <span class="k">for</span> <span class="n">dates</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encode_date_ranges</span><span class="p">([</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;date_range&#39;</span><span class="p">]]):</span>
+                            <span class="n">space2</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">web</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">dates</span> <span class="k">else</span> <span class="s1">&#39;+&#39;</span>
+                            <span class="k">yield</span> <span class="p">{</span><span class="s1">&#39;entity&#39;</span><span class="p">:</span> <span class="n">entity</span><span class="p">,</span>
+                                   <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">start_url</span><span class="si">}{</span><span class="bp">self</span><span class="o">.</span><span class="n">_encode_make_phrase</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">space</span><span class="p">)</span><span class="si">}</span><span class="s2">AND</span><span class="si">{</span><span class="n">space</span><span class="si">}</span><span class="s2">&quot;</span>
+                                          <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">OR_keywords</span><span class="si">}{</span><span class="n">space</span><span class="si">}{</span><span class="n">web</span><span class="si">}{</span><span class="n">encoded_excluded_kw</span><span class="si">}{</span><span class="n">host_lang</span><span class="si">}{</span><span class="n">space2</span><span class="si">}</span><span class="s2">&quot;</span>
+                                          <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dates</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">),</span>
+                                   <span class="s1">&#39;cache_url&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                   <span class="s1">&#39;retries&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                                   <span class="s1">&#39;response_encoding&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+                                   <span class="s1">&#39;language&#39;</span><span class="p">:</span> <span class="n">language</span><span class="p">,</span>
+                                   <span class="s1">&#39;proxy_account&#39;</span><span class="p">:</span> <span class="n">business_configuration</span><span class="p">[</span><span class="s1">&#39;proxy_account&#39;</span><span class="p">]</span>
+                                   <span class="p">}</span></div>
+
+<div class="viewcode-block" id="SearchService.update_configs"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService.update_configs">[docs]</a>    <span class="k">def</span> <span class="nf">update_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># todo this should be outside the class or in a base class</span>
+        <span class="c1"># todo replace this with push notification</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="c1"># read in configs every hour</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">now</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_refresh</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3600</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Check if there are new configs</span>
+            <span class="c1"># todo potential breakage if there are same outermost keys in the config files</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">BUSINESS_CONFIGS_PATHS</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BUSINESS_CONFIGS_DIR</span><span class="p">,</span> <span class="s1">&#39;*.json&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">CLIENT_CONFIGS_PATHS</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CLIENT_CONFIGS_DIR</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;*.json&#39;</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">service_configs</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SEARCH_SERVICE_CONFIG_PATH</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">business_configs</span> <span class="o">=</span> <span class="n">make_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BUSINESS_CONFIGS_PATHS</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">client_configs</span> <span class="o">=</span> <span class="n">make_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CLIENT_CONFIGS_PATHS</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">async_http_requests</span> <span class="o">=</span> <span class="n">AsyncHttpRequests</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">service_configs</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">config_refresh</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="n">basiclogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;search service configs updated&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SearchService.check_configs"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService.check_configs">[docs]</a>    <span class="k">def</span> <span class="nf">check_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">business_function</span><span class="p">,</span> <span class="n">client</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">business_function</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">business_configs</span><span class="p">[</span><span class="s1">&#39;search&#39;</span><span class="p">]</span> <span class="ow">or</span> \
+                <span class="n">client</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_configs</span><span class="p">[</span><span class="n">business_function</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_configs</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">business_function</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">business_configs</span><span class="p">[</span><span class="s1">&#39;search&#39;</span><span class="p">]:</span>
+                <span class="c1"># todo for now default to negative media</span>
+                <span class="n">business_function</span> <span class="o">=</span> <span class="s1">&#39;media&#39;</span>
+            <span class="k">if</span> <span class="n">client</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_configs</span><span class="p">[</span><span class="n">business_function</span><span class="p">]:</span>
+                <span class="n">client</span> <span class="o">=</span> <span class="s1">&#39;default&#39;</span>
+        <span class="k">return</span> <span class="n">business_function</span><span class="p">,</span> <span class="n">client</span></div>
+
+<div class="viewcode-block" id="SearchService.make_configuration"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService.make_configuration">[docs]</a>    <span class="k">def</span> <span class="nf">make_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extract configuration for a specific search</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            message (dict): JSON response message containing instructions on how to do a search</span>
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># todo this should be outside the class?</span>
+        <span class="n">entity</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;entity&#39;</span><span class="p">]</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;client&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;client&#39;</span> <span class="ow">in</span> <span class="n">message</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+        <span class="n">business_function</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">]</span>
+        <span class="c1"># check that client/business function exist in the configs. If not update. If still not, then provide a default</span>
+        <span class="n">business_function</span><span class="p">,</span> <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_configs</span><span class="p">(</span><span class="n">business_function</span><span class="p">,</span> <span class="n">client</span><span class="p">)</span>
+
+        <span class="n">business_configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">business_configs</span><span class="p">[</span><span class="s1">&#39;search&#39;</span><span class="p">][</span><span class="n">business_function</span><span class="p">]</span>
+        <span class="n">client_search_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_configs</span><span class="p">[</span><span class="n">business_function</span><span class="p">][</span><span class="n">client</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">entity</span><span class="p">,</span> <span class="n">business_configuration</span><span class="p">,</span> <span class="n">client_search_configs</span></div>
+
+<div class="viewcode-block" id="SearchService._assign_query_gen_inputs"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService._assign_query_gen_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">_assign_query_gen_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">business_configuration</span><span class="p">,</span> <span class="n">client_search_configs</span><span class="p">):</span>
+
+        <span class="c1"># entities: list = entities if entities else [&#39;&#39;]  # _query_gen Need &gt;=1 entity if looping over other params</span>
+        <span class="n">keywords</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">client_search_configs</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;keywords&#39;</span> <span class="ow">in</span> <span class="n">client_search_configs</span> <span class="k">else</span> \
+            <span class="n">business_configuration</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">]</span>
+
+        <span class="n">language</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">client_search_configs</span><span class="p">[</span><span class="s1">&#39;language&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;language&#39;</span> <span class="ow">in</span> <span class="n">client_search_configs</span> <span class="k">else</span> \
+            <span class="nb">list</span><span class="p">(</span><span class="n">keywords</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="n">websites</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">client_search_configs</span><span class="p">[</span><span class="s1">&#39;websites&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;websites&#39;</span> <span class="ow">in</span> <span class="n">client_search_configs</span> <span class="k">else</span> \
+            <span class="n">business_configuration</span><span class="p">[</span><span class="s1">&#39;websites&#39;</span><span class="p">]</span>
+
+        <span class="n">or_combine_websites</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">client_search_configs</span><span class="p">[</span><span class="s1">&#39;or_combine_websites&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;or_combine_websites&#39;</span> <span class="ow">in</span> <span class="n">client_search_configs</span> <span class="k">else</span> \
+            <span class="n">business_configuration</span><span class="p">[</span><span class="s1">&#39;or_combine_websites&#39;</span><span class="p">]</span>
+
+        <span class="n">or_combine_kw</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">client_search_configs</span><span class="p">[</span><span class="s1">&#39;or_combine_kw&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;or_combine_kw&#39;</span> <span class="ow">in</span> <span class="n">client_search_configs</span> <span class="k">else</span> \
+            <span class="n">business_configuration</span><span class="p">[</span><span class="s1">&#39;or_combine_kw&#39;</span><span class="p">]</span>
+
+        <span class="n">keywords_excluded</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">client_search_configs</span><span class="p">[</span>
+            <span class="s1">&#39;keywords_excluded&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;keywords_excluded&#39;</span> <span class="ow">in</span> <span class="n">client_search_configs</span> <span class="k">else</span> \
+            <span class="n">business_configuration</span><span class="p">[</span><span class="s1">&#39;keywords_excluded&#39;</span><span class="p">]</span>
+
+        <span class="c1"># todo add date_range if passed as an arb message parameter</span>
+        <span class="n">date_range</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">client_search_configs</span><span class="p">[</span><span class="s1">&#39;date_range&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;date_range&#39;</span> <span class="ow">in</span> <span class="n">client_search_configs</span> <span class="k">else</span> \
+            <span class="n">business_configuration</span><span class="p">[</span><span class="s1">&#39;date_range&#39;</span><span class="p">]</span>
+        <span class="n">query_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;entity&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">entity</span><span class="p">],</span>
+                        <span class="s1">&#39;keywords&#39;</span><span class="p">:</span> <span class="n">keywords</span><span class="p">,</span>
+                        <span class="s1">&#39;language&#39;</span><span class="p">:</span> <span class="n">language</span><span class="p">,</span>
+                        <span class="s1">&#39;websites&#39;</span><span class="p">:</span> <span class="n">websites</span><span class="p">,</span>
+                        <span class="s1">&#39;or_combine_kw&#39;</span><span class="p">:</span> <span class="n">or_combine_kw</span><span class="p">,</span>
+                        <span class="s1">&#39;or_combine_websites&#39;</span><span class="p">:</span> <span class="n">or_combine_websites</span><span class="p">,</span>
+                        <span class="s1">&#39;keywords_excluded&#39;</span><span class="p">:</span> <span class="n">keywords_excluded</span><span class="p">,</span>
+                        <span class="s1">&#39;date_range&#39;</span><span class="p">:</span> <span class="n">date_range</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_type_checking</span><span class="p">(</span><span class="o">**</span><span class="n">query_params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">query_params</span></div>
+
+<div class="viewcode-block" id="SearchService._get_start_url_host_lang"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService._get_start_url_host_lang">[docs]</a>    <span class="k">def</span> <span class="nf">_get_start_url_host_lang</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">business_configuration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read service configs to obtain the start_url and host_lang parameters</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            language (str): language for the search</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            start_url (str): start_url for the TLD</span>
+<span class="sd">            host_lang (str): language and geolocation-specific encoding applied to the url</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service_configs</span><span class="p">[</span><span class="s1">&#39;service_option&#39;</span><span class="p">][</span><span class="n">business_configuration</span><span class="p">[</span><span class="s1">&#39;service&#39;</span><span class="p">]][</span><span class="n">language</span><span class="p">]</span>
+        <span class="n">start_url</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;start_url&#39;</span><span class="p">]</span>
+        <span class="n">host_lang</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s1">&#39;host_lang&#39;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">start_url</span><span class="p">,</span> <span class="n">host_lang</span></div>
+
+<div class="viewcode-block" id="SearchService._encode_make_phrase"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService._encode_make_phrase">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_encode_make_phrase</span><span class="p">(</span><span class="n">words</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">space</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper function. Makes a HTML encoded string using words and spaces using html encodings to replaces spaces and</span>
+<span class="sd">        quotes with their % counterparts (ex. Space (&#39;&#39;) = &#39;+&#39; and so on). Space variable can be anything to add</span>
+<span class="sd">        after the double quotes following the word.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            words (str): Word to make phrase with</span>
+<span class="sd">            space (str): space</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            empty string if word is None else word wrapped in quotes with space.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">words</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;%22</span><span class="si">{0}</span><span class="s1">%22</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">words</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">,</span> <span class="s1">&#39;%26&#39;</span><span class="p">),</span> <span class="n">space</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SearchService._encode_site_search"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService._encode_site_search">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_encode_site_search</span><span class="p">(</span><span class="n">websites</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">or_combine_websites</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds site:http://www.website.com to Google search. If website == &#39;None&#39;, then default case is to NOT include</span>
+<span class="sd">        site:example.com. This is useful if a search would like to search specific sites as well as not.</span>
+
+<span class="sd">        Ex. `site:xyz.com` for one search and not including this string in another search.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            string  &#39;site:website.com&#39;  if websites else empty string</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">colon</span> <span class="o">=</span> <span class="s1">&#39;%3A&#39;</span>
+        <span class="c1"># default case, no websites</span>
+        <span class="k">if</span> <span class="n">websites</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">websites</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># &#39;%20&#39;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">or_combine_websites</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">website</span> <span class="ow">in</span> <span class="n">websites</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">website</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">website</span> <span class="o">==</span> <span class="s1">&#39;None&#39;</span><span class="p">):</span>
+                    <span class="k">yield</span> <span class="s1">&#39;site&#39;</span> <span class="o">+</span> <span class="n">colon</span> <span class="o">+</span> <span class="n">website</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># &#39;%20&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">websites</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="s1">&#39;site&#39;</span> <span class="o">+</span> <span class="n">colon</span> <span class="o">+</span> <span class="n">websites</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="s1">&#39;site&#39;</span> <span class="o">+</span> <span class="n">colon</span> <span class="o">+</span> <span class="s1">&#39;%20OR</span><span class="si">%20s</span><span class="s1">ite%3A&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">websites</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SearchService._encode_keywords_excluded"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService._encode_keywords_excluded">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_encode_keywords_excluded</span><span class="p">(</span><span class="n">keywords_excluded</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate string of filter keywords. This is to remove those keywords from search results.</span>
+<span class="sd">        This is akin to typing: -excluded_kw1 -excluded_kw2 etc. In the search bar.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            string</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            Input:</span>
+<span class="sd">                keywords_excluded = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]</span>
+
+<span class="sd">            Output:</span>
+<span class="sd">                &#39;%20-a%20-b%20-c&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># default case, no filter keywords</span>
+        <span class="k">if</span> <span class="n">keywords_excluded</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">keywords_excluded</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># &#39;%20&#39;</span>
+
+        <span class="k">if</span> <span class="n">keywords_excluded</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;%20-&#39;</span> <span class="o">+</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">keywords_excluded</span><span class="p">)</span></div>
+        <span class="c1"># and for any other weird reason</span>
+        <span class="c1"># return &#39;&#39;  # &#39;%20&#39;</span>
+
+<div class="viewcode-block" id="SearchService._encode_date_ranges"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService._encode_date_ranges">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_encode_date_ranges</span><span class="p">(</span><span class="n">date_range</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Filter search results by date. Takes date_range list and parses the info inside and creates the string to be</span>
+<span class="sd">        added to the query.</span>
+
+<span class="sd">        Possible options for the element inside the date_range list are:</span>
+<span class="sd">        </span>
+<span class="sd">        - &quot;anytime&quot; or &quot;a&quot;</span>
+<span class="sd">        - &quot;hour&quot; or &quot;h&quot;(past hour)</span>
+<span class="sd">        - &quot;day&quot; or &quot;d&quot; (past day)</span>
+<span class="sd">        - &quot;week&quot; or &quot;w&quot; (past week)</span>
+<span class="sd">        - &quot;month&quot; or &quot;m&quot; (past month)</span>
+<span class="sd">        - &quot;year&quot; or &quot;y&quot; (past year)</span>
+<span class="sd">        - mm/dd/yyyy,mm/dd/yyyy (between two dates with earliest first)</span>
+<span class="sd">            * The code handles the case where the two dates are out of order.</span>
+<span class="sd">            * The delimeter between the two dates can be one of ‘,- ‘ (comma, hyphen or space)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            string with the HTML encoded date</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            Input:</span>
+<span class="sd">                date1, date2 are format mm/dd/yyyy,mm/dd/yyyy</span>
+
+<span class="sd">            Output:</span>
+<span class="sd">                &#39;&amp;tbs=cdr%3A1%2Ccd_min%3A&#39; + date1 + &#39;%2Ccd_max%3A&#39; + date2</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># if (date_range is None) or (len(date_range) == 0):</span>
+        <span class="c1">#     yield &#39;&#39;  # &#39;%20&#39;</span>
+        <span class="c1"># %3A is a colon :</span>
+        <span class="n">pre_string</span> <span class="o">=</span> <span class="s1">&#39;&amp;tbs=qdr%3A&#39;</span>
+        <span class="k">for</span> <span class="n">date_entry</span> <span class="ow">in</span> <span class="n">date_range</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">date_entry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">date_entry</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">date_entry</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">date_entry</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">elif</span> <span class="n">date_entry</span> <span class="o">==</span> <span class="s1">&#39;anytime&#39;</span> <span class="ow">or</span> <span class="n">date_entry</span> <span class="o">==</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="s1">&#39;&amp;tbas=0&#39;</span>
+            <span class="k">elif</span> <span class="n">date_entry</span> <span class="o">==</span> <span class="s1">&#39;hour&#39;</span> <span class="ow">or</span> <span class="n">date_entry</span> <span class="o">==</span> <span class="s1">&#39;h&#39;</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">pre_string</span> <span class="o">+</span> <span class="s1">&#39;h&#39;</span>
+            <span class="k">elif</span> <span class="n">date_entry</span> <span class="o">==</span> <span class="s1">&#39;day&#39;</span> <span class="ow">or</span> <span class="n">date_entry</span> <span class="o">==</span> <span class="s1">&#39;d&#39;</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">pre_string</span> <span class="o">+</span> <span class="s1">&#39;d&#39;</span>
+            <span class="k">elif</span> <span class="n">date_entry</span> <span class="o">==</span> <span class="s1">&#39;week&#39;</span> <span class="ow">or</span> <span class="n">date_entry</span> <span class="o">==</span> <span class="s1">&#39;w&#39;</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">pre_string</span> <span class="o">+</span> <span class="s1">&#39;w&#39;</span>
+            <span class="k">elif</span> <span class="n">date_entry</span> <span class="o">==</span> <span class="s1">&#39;month&#39;</span> <span class="ow">or</span> <span class="n">date_entry</span> <span class="o">==</span> <span class="s1">&#39;m&#39;</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">pre_string</span> <span class="o">+</span> <span class="s1">&#39;m&#39;</span>
+            <span class="k">elif</span> <span class="n">date_entry</span> <span class="o">==</span> <span class="s1">&#39;year&#39;</span> <span class="ow">or</span> <span class="n">date_entry</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">pre_string</span> <span class="o">+</span> <span class="s1">&#39;y&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># if any, and find separator</span>
+                    <span class="k">if</span> <span class="s1">&#39;,&#39;</span> <span class="ow">in</span> <span class="n">date_entry</span><span class="p">:</span>
+                        <span class="n">date1</span><span class="p">,</span> <span class="n">date2</span> <span class="o">=</span> <span class="n">date_entry</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="s1">&#39; &#39;</span> <span class="ow">in</span> <span class="n">date_entry</span><span class="p">:</span>
+                        <span class="n">date1</span><span class="p">,</span> <span class="n">date2</span> <span class="o">=</span> <span class="n">date_entry</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">date1</span><span class="p">,</span> <span class="n">date2</span> <span class="o">=</span> <span class="n">date_entry</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+                    <span class="n">date1_check</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">date1</span><span class="p">,</span> <span class="s1">&#39;%m/</span><span class="si">%d</span><span class="s1">/%Y&#39;</span><span class="p">)</span>
+                    <span class="n">date2_check</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">date2</span><span class="p">,</span> <span class="s1">&#39;%m/</span><span class="si">%d</span><span class="s1">/%Y&#39;</span><span class="p">)</span>
+                    <span class="c1"># check that dates are in order of min date , max date</span>
+                    <span class="k">if</span> <span class="n">date2_check</span> <span class="o">&lt;</span> <span class="n">date1_check</span><span class="p">:</span>
+                        <span class="n">date1</span><span class="p">,</span> <span class="n">date2</span> <span class="o">=</span> <span class="n">date2</span><span class="p">,</span> <span class="n">date1</span>
+                    <span class="n">date1</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%2F</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">date2</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%2F</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="k">yield</span> <span class="s1">&#39;&amp;tbs=cdr%3A1%2Ccd_min%3A&#39;</span> <span class="o">+</span> <span class="n">date1</span> <span class="o">+</span> <span class="s1">&#39;%2Ccd_max%3A&#39;</span> <span class="o">+</span> <span class="n">date2</span>
+
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                    <span class="n">basiclogger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+                    <span class="c1"># if all else fails, yield &#39;&#39;</span>
+                    <span class="k">yield</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># &#39;%20&#39;</span></div>
+
+<div class="viewcode-block" id="SearchService._encode_keyword_combos"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService._encode_keyword_combos">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_encode_keyword_combos</span><span class="p">(</span><span class="n">keywords</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">degree</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates tuples for combinations of keywords. See here for more information on how the degree works:</span>
+<span class="sd">        https://en.wikipedia.org/wiki/Binomial_coefficient Most times we want to use degree=1. However, for research</span>
+<span class="sd">        purposes we may want to test out different keyword combinations.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            keywords (list): list of keywords. If provided from config file, provide self.keywords[language] to get</span>
+<span class="sd">            the list</span>
+<span class="sd">            degree (int): Degree of combinations (the k in n_choose_k from Probability &amp; Statistics</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Generator tuples of form (comb(keywords,1), keyword)</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            k = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;]</span>
+
+<span class="sd">            Input:</span>
+<span class="sd">                combos(k,2)</span>
+
+<span class="sd">            Output:</span>
+<span class="sd">                (&quot;a&quot;%20&quot;b&quot;, &#39;a b&#39;)</span>
+<span class="sd">                (&quot;a&quot;%20&quot;c&quot;, &#39;a c&#39;)</span>
+<span class="sd">                (&quot;a&quot;%20&quot;d&quot;, &#39;a d&#39;)</span>
+<span class="sd">                (&quot;b&quot;%20&quot;c&quot;, &#39;b c&#39;)</span>
+<span class="sd">                (&quot;b&quot;%20&quot;d&quot;, &#39;b d&#39;)</span>
+<span class="sd">                (&quot;c&quot;%20&quot;d&quot;, &#39;c d&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">quote</span> <span class="o">=</span> <span class="s1">&#39;%22&#39;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keywords</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="s1">&#39;%20&#39;</span><span class="p">,</span> <span class="s1">&#39;%20&#39;</span>
+
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">combinations</span><span class="p">(</span><span class="n">keywords</span><span class="p">,</span> <span class="n">degree</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="p">:</span>
+                <span class="c1"># for empty string</span>
+                <span class="k">yield</span> <span class="s1">&#39;%20&#39;</span><span class="p">,</span> <span class="s1">&#39;%20&#39;</span>
+            <span class="c1"># yield (&#39;&quot;&#39; + &#39;&quot;%20&quot;&#39;.join(x) + &#39;&quot;&#39;, &#39; &#39;.join(x))</span>
+            <span class="k">yield</span> <span class="n">quote</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">%22%</span><span class="s1">20%22&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">quote</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SearchService._type_checking"><a class="viewcode-back" href="../../modules/search_svc.html#search_svc.search.SearchService._type_checking">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_type_checking</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Rudimentary type checking of input variables. This is run at the end of the __init__ instance of a class.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None, if checked inputs pass given criteria</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;entity&#39;</span><span class="p">],</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;entity&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+                <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">],</span> <span class="nb">dict</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;entities and keywords must both be lists with len &gt;0&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;keywords_excluded&#39;</span><span class="p">],</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;keywords_excluded&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;filter keywords must be of type == dict with the key a supported language string&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">]))</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;keywords&#39;</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Don</span><span class="se">\&#39;</span><span class="s1">t use duplicate keywords.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;keywords_excluded&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">filtered</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;keywords_excluded&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filtered</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Don</span><span class="se">\&#39;</span><span class="s1">t use empty quotes or space in filter. &#39;</span>
+                                     <span class="s1">&#39;Make sure there is no end line of file.&#39;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, E.S.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

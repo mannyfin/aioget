@@ -1,0 +1,485 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>parser_svc.parser &mdash; aioget 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> aioget
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">core</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/core.html">core package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">search service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/search_svc.html">search_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">download service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/download_svc.html">download_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">parser service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/parser_svc.html">parser_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/modules.html">parser_svc</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aioget</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>parser_svc.parser</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for parser_svc.parser</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;/..&quot;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">core.utils</span> <span class="kn">import</span> <span class="n">load_config</span><span class="p">,</span> <span class="n">parse_consumer</span><span class="p">,</span> <span class="n">make_config</span><span class="p">,</span> <span class="n">set_arb</span><span class="p">,</span> <span class="n">pop_arb_field_if_exists</span>
+<span class="kn">from</span> <span class="nn">configs.base.consts</span> <span class="kn">import</span> <span class="n">CONFIG_DIR</span><span class="p">,</span> <span class="n">ASYNC_SLEEP</span>
+<span class="kn">from</span> <span class="nn">core</span> <span class="kn">import</span> <span class="n">logger</span><span class="p">,</span> <span class="n">async_queue</span>
+
+<span class="kn">from</span> <span class="nn">sys</span> <span class="kn">import</span> <span class="n">platform</span>
+<span class="k">if</span> <span class="n">platform</span> <span class="o">!=</span> <span class="s1">&#39;win32&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">uvloop</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop_policy</span><span class="p">(</span><span class="n">uvloop</span><span class="o">.</span><span class="n">EventLoopPolicy</span><span class="p">())</span>
+
+<span class="n">basiclogger</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">rabbit_logger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ParserService"><a class="viewcode-back" href="../../modules/parser_svc.html#parser_svc.parser.ParserService">[docs]</a><span class="k">class</span> <span class="nc">ParserService</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c1"># BUSINESS_CONFIGS_DIR = f&quot;{CONFIG_DIR}/business_drivers/search&quot;  # NegMedia/SJA/LOB/etc</span>
+    <span class="n">CLIENT_CONFIGS_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CONFIG_DIR</span><span class="p">,</span> <span class="s1">&#39;client&#39;</span><span class="p">)</span>
+    <span class="n">BUSINESS_CONFIGS_PATHS</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CONFIG_DIR</span><span class="p">,</span> <span class="s1">&#39;business_drivers&#39;</span><span class="p">,</span> <span class="s1">&#39;parser&#39;</span><span class="p">,</span> <span class="s1">&#39;parser.json&#39;</span><span class="p">)</span>
+    <span class="n">CLIENT_CONFIGS_PATHS</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CLIENT_CONFIGS_DIR</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;*.json&#39;</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_queue</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">,</span> <span class="n">publish_queue</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">business_configs</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BUSINESS_CONFIGS_PATHS</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client_configs</span> <span class="o">=</span> <span class="n">make_config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CLIENT_CONFIGS_PATHS</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_queue</span> <span class="o">=</span> <span class="n">input_queue</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publish_queue</span> <span class="o">=</span> <span class="n">publish_queue</span>
+
+        <span class="c1">#  todo convert to push config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_refresh</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">import_parser_funcs</span><span class="p">()</span>
+
+<div class="viewcode-block" id="ParserService.start"><a class="viewcode-back" href="../../modules/parser_svc.html#parser_svc.parser.ParserService.start">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start the Download Service</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># async_filesystem.create_fs(self.file_system_path)</span>
+            <span class="n">parse_queue</span> <span class="o">=</span> <span class="n">async_queue</span><span class="o">.</span><span class="n">get_queue</span><span class="p">()</span>
+            <span class="n">write_queue</span> <span class="o">=</span> <span class="n">async_queue</span><span class="o">.</span><span class="n">get_queue</span><span class="p">()</span>
+
+            <span class="n">workers</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>  <span class="c1"># range(self.async_http_requests.connections)):</span>
+                <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">put_onto_parse_queue</span><span class="p">(</span><span class="n">parse_queue</span><span class="p">))</span>
+                <span class="n">workers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+
+            <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">parse_consumer</span><span class="p">(</span><span class="n">next_queue</span><span class="o">=</span><span class="n">parse_queue</span><span class="p">,</span> <span class="n">write_queue</span><span class="o">=</span><span class="n">write_queue</span>
+                                                      <span class="p">))</span>
+            <span class="n">workers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+
+            <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_response</span><span class="p">(</span><span class="n">write_queue</span><span class="o">=</span><span class="n">write_queue</span><span class="p">,</span>
+                                                           <span class="p">))</span>
+            <span class="n">workers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">workers</span><span class="p">)</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_queue</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">publish_queue</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">parse_queue</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">write_queue</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">consumer</span> <span class="ow">in</span> <span class="n">workers</span><span class="p">:</span>
+                <span class="c1"># canceling</span>
+                <span class="n">consumer</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="c1"># catastrophic failure...</span>
+            <span class="n">basiclogger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
+
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="ParserService.import_parser_funcs"><a class="viewcode-back" href="../../modules/parser_svc.html#parser_svc.parser.ParserService.import_parser_funcs">[docs]</a>    <span class="k">def</span> <span class="nf">import_parser_funcs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dynamic importing of parse functions into the business configuration</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &quot;media&quot;: &quot;parser.snapshot.parse&quot;,</span>
+
+<span class="sd">            will look for the `parse` function in the src/parser/snapshot.py module</span>
+
+<span class="sd">            Then it will add the function to the service configuration under:</span>
+<span class="sd">            service_config[&#39;funcs&#39;][&#39;media&#39;] = parse</span>
+
+<span class="sd">            The parse func can be used normally:</span>
+<span class="sd">            parse(kwargs)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">business_configs</span><span class="p">[</span><span class="s1">&#39;funcs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">business_function</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">business_configs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">business_function</span> <span class="o">==</span> <span class="s1">&#39;funcs&#39;</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">modname</span><span class="p">,</span> <span class="n">funcname</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="s1">&#39;parser&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># mod = importlib.import_module(f&#39;..{modname}&#39;, package=f&#39;parser_scripts.{modname.split(&quot;.&quot;)[0]}&#39;)</span>
+                <span class="n">mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">modname</span><span class="p">)</span>
+                <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">funcname</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">business_configs</span><span class="p">[</span><span class="s1">&#39;funcs&#39;</span><span class="p">][</span><span class="n">business_function</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span>
+            <span class="k">except</span> <span class="ne">ModuleNotFoundError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="n">basiclogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="n">basiclogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span></div>
+
+    <span class="c1"># def update_configs(self):</span>
+    <span class="c1">#     # todo this should be outside the class</span>
+    <span class="c1">#     # todo replace this with push notification</span>
+    <span class="c1">#     now = time.time()</span>
+    <span class="c1">#     # read in configs every hour</span>
+    <span class="c1">#     if (now - self.config_refresh) / 3600 &gt; 1:</span>
+    <span class="c1">#         # Check if there are new configs</span>
+    <span class="c1">#         # todo potential breakage if there are same outermost keys in the config files</span>
+    <span class="c1">#         self.BUSINESS_CONFIGS_PATHS = glob.glob(os.path.join(self.BUSINESS_CONFIGS_DIR, &#39;*.json&#39;))</span>
+    <span class="c1">#         self.CLIENT_CONFIGS_PATHS = glob.glob(os.path.join(self.CLIENT_CONFIGS_DIR, &#39;*&#39;, &#39;*.json&#39;))</span>
+    <span class="c1">#</span>
+    <span class="c1">#         # self.service_configs = load_config(self.SEARCH_SERVICE_CONFIG_PATH)</span>
+    <span class="c1">#         self.business_configs = make_config(self.BUSINESS_CONFIGS_PATHS)</span>
+    <span class="c1">#         self.client_configs = make_config(self.CLIENT_CONFIGS_PATHS)</span>
+    <span class="c1">#</span>
+    <span class="c1">#         self.config_refresh = time.time()</span>
+    <span class="c1">#         # todo, message to fanout exchange, logger.info(&#39;search service configs updated&#39;)</span>
+    <span class="c1">#</span>
+    <span class="c1"># def check_configs(self, business_function, client):</span>
+    <span class="c1">#     if business_function not in self.business_configs or \</span>
+    <span class="c1">#             client not in self.client_configs[business_function]:</span>
+    <span class="c1">#         self.update_configs()</span>
+    <span class="c1">#         if business_function not in self.business_configs:</span>
+    <span class="c1">#             # todo for now default to negative media</span>
+    <span class="c1">#             business_function = &#39;media&#39;</span>
+    <span class="c1">#         if client not in self.client_configs[business_function]:</span>
+    <span class="c1">#             # todo for now default to &#39;default&#39;</span>
+    <span class="c1">#             client = &#39;default&#39;</span>
+    <span class="c1">#     return business_function, client</span>
+    <span class="c1">#</span>
+    <span class="c1"># def make_configuration(self, message):</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     Extract configuration for a specific search</span>
+    <span class="c1">#</span>
+    <span class="c1">#     Args:</span>
+    <span class="c1">#         message (dict): JSON response message containing instructions on how to do a search</span>
+    <span class="c1">#     Returns:</span>
+    <span class="c1">#</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     # todo this should be outside the class?</span>
+    <span class="c1">#     entity = message[&#39;entity&#39;]</span>
+    <span class="c1">#     client = message[&#39;client&#39;] if &#39;client&#39; in message else &#39;&#39;</span>
+    <span class="c1">#     business_function = message[&#39;business_function&#39;]</span>
+    <span class="c1">#     # check that client/business function exist in the configs. If not update. If still not, then provide a default</span>
+    <span class="c1">#     business_function, client = self.check_configs(business_function, client)</span>
+    <span class="c1">#</span>
+    <span class="c1">#     business_configuration = self.business_configs[business_function]</span>
+    <span class="c1">#     client_search_configs = self.client_configs[business_function][client]</span>
+    <span class="c1">#     return entity, business_configuration, client_search_configs</span>
+
+<div class="viewcode-block" id="ParserService.put_onto_parse_queue"><a class="viewcode-back" href="../../modules/parser_svc.html#parser_svc.parser.ParserService.put_onto_parse_queue">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">put_onto_parse_queue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parse_queue</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read input messages, then add the appropriate parse func and then put onto parse_queue</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            parse_queue:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ASYNC_SLEEP</span><span class="p">)</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_queue</span><span class="o">.</span><span class="n">qsize</span><span class="p">():</span>
+                <span class="c1"># if self.input_queue.qsize():</span>
+                <span class="n">message</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+                        <span class="n">message</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+                    <span class="c1"># include download_queue fields</span>
+                    <span class="k">if</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">business_configs</span><span class="p">[</span><span class="s1">&#39;funcs&#39;</span><span class="p">]:</span>
+                        <span class="c1"># add func to parse the webpage.</span>
+                        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;parse_func&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">business_configs</span><span class="p">[</span><span class="s1">&#39;funcs&#39;</span><span class="p">][</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">]]</span>
+                        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;exit_routing_key&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">business_configs</span><span class="p">[</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">]][</span>
+                            <span class="s1">&#39;exit_routing_key&#39;</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">basiclogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> not found in parser_service_config&quot;</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="s1">&#39;client&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">message</span><span class="p">:</span>
+                        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;client_config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="k">elif</span> <span class="s1">&#39;business_function&#39;</span> <span class="ow">in</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_configs</span> <span class="ow">and</span> \
+                            <span class="s1">&#39;client&#39;</span> <span class="ow">in</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;client&#39;</span><span class="p">]</span> <span class="ow">in</span>\
+                            <span class="bp">self</span><span class="o">.</span><span class="n">client_configs</span><span class="p">[</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">]]:</span>
+                        <span class="n">client_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_configs</span><span class="p">[</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">]][</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;client&#39;</span><span class="p">]]</span>
+                        <span class="n">message</span><span class="p">[</span><span class="s1">&#39;client_config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">client_config</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">basiclogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;business_function&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> or client: </span><span class="si">{</span><span class="n">message</span><span class="p">[</span><span class="s1">&#39;client&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> not found in &quot;</span>
+                                          <span class="sa">f</span><span class="s2">&quot;client_service_config&quot;</span><span class="p">)</span>
+
+                    <span class="c1">#parser funcs expect an arb field if there are passthrough items</span>
+                    <span class="c1"># arb, message = pop_arb_field_if_exists(message)</span>
+                    <span class="c1"># message = set_arb(msg=message, arb=arb)</span>
+
+                    <span class="k">await</span> <span class="n">parse_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+                    <span class="c1"># print(&#39;parse_queue unfinished items&#39;, parse_queue._unfinished_tasks, flush=True)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                    <span class="n">basiclogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="ParserService.write_response"><a class="viewcode-back" href="../../modules/parser_svc.html#parser_svc.parser.ParserService.write_response">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">write_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">write_queue</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">):</span>
+
+        <span class="c1"># today = datetime.today().date().isoformat()</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ASYNC_SLEEP</span><span class="p">)</span>
+            <span class="n">futures</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">ctr</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">write_queue</span><span class="o">.</span><span class="n">qsize</span><span class="p">()):</span>
+                <span class="n">futures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">write_queue</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">())</span>
+                <span class="n">write_queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+            <span class="k">while</span> <span class="n">futures</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">parsed_output</span> <span class="o">=</span> <span class="k">await</span> <span class="n">_</span>
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                        <span class="n">parsed_output</span> <span class="o">=</span> <span class="p">{}</span>
+                        <span class="n">basiclogger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
+
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="c1"># result = await async_queue.get_from_queue(write_queue)</span>
+                        <span class="k">if</span> <span class="n">parsed_output</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">publish_queue</span><span class="p">:</span>
+
+                            <span class="c1"># print(&#39;parsed output&#39;, parsed_output, flush=True)</span>
+                            <span class="c1"># only publish non empty result</span>
+
+                            <span class="n">routing_key</span> <span class="o">=</span> <span class="n">parsed_output</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;exit_routing_key&#39;</span><span class="p">)</span>
+                            <span class="n">msg</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;exit_routing_key&#39;</span><span class="p">:</span> <span class="n">routing_key</span><span class="p">,</span>
+                                   <span class="s1">&#39;body&#39;</span><span class="p">:</span> <span class="n">parsed_output</span><span class="p">}</span>
+                            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">publish_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+                    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                        <span class="n">basiclogger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
+
+                <span class="k">if</span> <span class="n">futures</span><span class="p">:</span>
+                    <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">futures</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span><span class="o">.</span><span class="n">done</span><span class="p">()]</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">input_queue</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+    <span class="n">output_queue</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">input_queue</span><span class="p">,</span> <span class="n">output_queue</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">parser_service</span> <span class="o">=</span> <span class="n">ParserService</span><span class="p">(</span><span class="n">input_queue</span><span class="p">,</span> <span class="n">output_queue</span><span class="p">)</span>
+            <span class="n">workers</span><span class="p">,</span> <span class="n">queues</span><span class="p">,</span> <span class="n">session</span> <span class="o">=</span> <span class="k">await</span> <span class="n">parser_service</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">workers</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">queue</span> <span class="ow">in</span> <span class="n">queues</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">queue</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            <span class="n">input_queue</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            <span class="n">output_queue</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">consumer</span> <span class="ow">in</span> <span class="n">workers</span><span class="p">:</span>
+                <span class="c1"># canceling</span>
+                <span class="n">consumer</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="n">basiclogger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">())</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">(</span><span class="n">input_queue</span><span class="p">,</span> <span class="n">output_queue</span><span class="p">))</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, E.S.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

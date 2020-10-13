@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>core.filtration &mdash; aioget 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home" alt="Documentation Home"> aioget
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">core</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/core.html">core package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">search service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/search_svc.html">search_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">download service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/download_svc.html">download_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">parser service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/parser_svc.html">parser_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules/modules.html">parser_svc</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">aioget</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>core.filtration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for core.filtration</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">dateutil.relativedelta</span> <span class="kn">import</span> <span class="n">relativedelta</span>
+
+
+<span class="c1"># todo might want to rename some of the filter_funcs to is_func since they are returning bools.</span>
+
+
+<div class="viewcode-block" id="filter_entities_redis"><a class="viewcode-back" href="../../modules/core.html#core.filtration.filter_entities_redis">[docs]</a><span class="k">def</span> <span class="nf">filter_entities_redis</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">language</span><span class="p">,</span> <span class="n">business_function</span><span class="p">,</span> <span class="n">refresh_period</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">master_search_history</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Take an entity, language, and business_function combination and check if it was searched in a Redis DB. If not,</span>
+<span class="sd">    return the entity and do the search. If it was, then check if searched within refresh period. If searched within</span>
+<span class="sd">    refresh period, don&#39;t do the search. Only do the search if older than the refresh period.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        entity:</span>
+<span class="sd">        language:</span>
+<span class="sd">        business_function:</span>
+<span class="sd">        refresh_period:</span>
+<span class="sd">        master_search_history: Redis DB host - localhost, port = 6379, db=0</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if the search should be performed</span>
+<span class="sd">        False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># master_search_history = redis.Redis(**db_params)  # DB from service config</span>
+    <span class="n">regexp_entity</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\W+&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">entity</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+    <span class="n">lookup</span> <span class="o">=</span> <span class="n">master_search_history</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">regexp_entity</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">language</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">business_function</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">lookup</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># extract out the date (might be just bytestring, or dictionary)</span>
+    <span class="n">entity_info</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">lookup</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;date&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">entity_info</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="n">date_last_searched</span> <span class="o">=</span> <span class="n">entity_info</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">filter_by_date</span><span class="p">(</span><span class="n">date_last_searched</span><span class="p">,</span> <span class="n">refresh_period</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="filter_garbage_url_search_result"><a class="viewcode-back" href="../../modules/core.html#core.filtration.filter_garbage_url_search_result">[docs]</a><span class="k">def</span> <span class="nf">filter_garbage_url_search_result</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">url_filter_exclusion_patterns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;If any of the url_filter_exclusion_patterns appear, then don&#39;t bother with it...&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">url_filter_exclusion_patterns</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span> <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">url_filter_exclusion_patterns</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="filter_by_date"><a class="viewcode-back" href="../../modules/core.html#core.filtration.filter_by_date">[docs]</a><span class="k">def</span> <span class="nf">filter_by_date</span><span class="p">(</span><span class="n">date_last_searched</span><span class="p">,</span> <span class="n">refresh_period</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">date_last_searched_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">date_last_searched</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+
+    <span class="n">day_period</span> <span class="o">=</span> <span class="n">refresh_period</span><span class="p">[</span><span class="s1">&#39;days&#39;</span><span class="p">]</span>
+    <span class="n">month_period</span> <span class="o">=</span> <span class="n">refresh_period</span><span class="p">[</span><span class="s1">&#39;months&#39;</span><span class="p">]</span>
+    <span class="n">year_period</span> <span class="o">=</span> <span class="n">refresh_period</span><span class="p">[</span><span class="s1">&#39;years&#39;</span><span class="p">]</span>
+
+    <span class="n">past_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()</span> <span class="o">+</span> <span class="n">relativedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=-</span><span class="n">day_period</span><span class="p">,</span> <span class="n">months</span><span class="o">=-</span><span class="n">month_period</span><span class="p">,</span> <span class="n">years</span><span class="o">=-</span><span class="n">year_period</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">past_date</span> <span class="o">&gt;</span> <span class="n">date_last_searched_datetime</span><span class="p">:</span>
+        <span class="c1"># past_date is newer, so search again</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="filter_already_downloaded_url_redis"><a class="viewcode-back" href="../../modules/core.html#core.filtration.filter_already_downloaded_url_redis">[docs]</a><span class="k">def</span> <span class="nf">filter_already_downloaded_url_redis</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">refresh_period</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">master_download_history</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="c1"># master_search_history = redis.Redis(**db_params)  # DB from service config</span>
+
+    <span class="n">lookup</span> <span class="o">=</span> <span class="n">master_download_history</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">lookup</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="n">lookup</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">lookup</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">lookup</span><span class="p">[</span><span class="s1">&#39;success&#39;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="n">date_last_searched</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">filter_by_date</span><span class="p">(</span><span class="n">date_last_searched</span><span class="p">,</span> <span class="n">refresh_period</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, E.S.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

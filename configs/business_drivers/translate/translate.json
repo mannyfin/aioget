@@ -1,0 +1,8 @@
+{
+  "media": {"text" : "",
+            "exit_routing_key": "media"
+                     },
+  "line_of_business": {"text": "line_of_business",
+                       "exit_routing_key": "lob"
+                       }
+}

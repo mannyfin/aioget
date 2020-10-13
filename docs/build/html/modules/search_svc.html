@@ -1,0 +1,562 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>search_svc package &mdash; aioget 0.1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="download_svc package" href="download_svc.html" />
+    <link rel="prev" title="core package" href="core.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> aioget
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">core</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core.html">core package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">search service</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">search_svc package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-search_svc.search">search_svc.search module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-search_svc.search_service_driver">search_svc.search_service_driver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-search_svc">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption"><span class="caption-text">download service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="download_svc.html">download_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">parser service</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="parser_svc.html">parser_svc package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">parser_svc</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">aioget</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>search_svc package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/search_svc.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="search-svc-package">
+<h1>search_svc package<a class="headerlink" href="#search-svc-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-search_svc.search">
+<span id="search-svc-search-module"></span><h2>search_svc.search module<a class="headerlink" href="#module-search_svc.search" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="search_svc.search.SearchService">
+<em class="property">class </em><code class="sig-name descname">SearchService</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em>, <em class="sig-param"><span class="n">publish_queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/search_svc/search.html#SearchService"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The Search Service is a generic class that is used by any process in order to accept search inputs (e.g. search
+terms, keywords, sites, etc.), perform searches, and pass the results to another service. The Search Service
+implements a search query generator + async http requests + webpage Data Parser (google or googlenews) + async
+write to write outputs to a file.</p>
+<dl class="py attribute">
+<dt id="search_svc.search.SearchService.SEARCH_SERVICE_CONFIG_PATH">
+<code class="sig-name descname">SEARCH_SERVICE_CONFIG_PATH</code><em class="property"> = '..\\configs\\service\\search.json'</em><a class="headerlink" href="#search_svc.search.SearchService.SEARCH_SERVICE_CONFIG_PATH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="search_svc.search.SearchService.BUSINESS_CONFIGS_DIR">
+<code class="sig-name descname">BUSINESS_CONFIGS_DIR</code><em class="property"> = '..\\configs\\business_drivers\\search'</em><a class="headerlink" href="#search_svc.search.SearchService.BUSINESS_CONFIGS_DIR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="search_svc.search.SearchService.CLIENT_CONFIGS_DIR">
+<code class="sig-name descname">CLIENT_CONFIGS_DIR</code><em class="property"> = '..\\configs\\client'</em><a class="headerlink" href="#search_svc.search.SearchService.CLIENT_CONFIGS_DIR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="search_svc.search.SearchService.BUSINESS_CONFIGS_PATHS">
+<code class="sig-name descname">BUSINESS_CONFIGS_PATHS</code><em class="property"> = ['..\\configs\\business_drivers\\search\\line_of_business.json', '..\\configs\\business_drivers\\search\\media.json', '..\\configs\\business_drivers\\search\\sja.json']</em><a class="headerlink" href="#search_svc.search.SearchService.BUSINESS_CONFIGS_PATHS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="search_svc.search.SearchService.CLIENT_CONFIGS_PATHS">
+<code class="sig-name descname">CLIENT_CONFIGS_PATHS</code><em class="property"> = ['..\\configs\\client\\line_of_business\\line_of_business_default.json', '..\\configs\\client\\media\\media_default.json', '..\\configs\\client\\sja\\sja_default.json']</em><a class="headerlink" href="#search_svc.search.SearchService.CLIENT_CONFIGS_PATHS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="search_svc.search.SearchService.start">
+<code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/search_svc/search.html#SearchService.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts the Search Service by creating a worker daemons for each number of TCP connections for the desired
+concurrency. After a worker completes a url request, it sends the response to a webpage parser, which extracts
+the urls. Finally, the extracted urls are individually placed on messages for another service.</p>
+<p>Issues are saved in an audit file for review</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>workers, queues, session</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="search_svc.search.SearchService.put_onto_query_queue">
+<em class="property">async </em><code class="sig-name descname">put_onto_query_queue</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query_queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/search_svc/search.html#SearchService.put_onto_query_queue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService.put_onto_query_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a message off of the input queue. Extracts the query and the service/business/client configuration and
+places it on the query queue</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>query_queue</strong> – </p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="search_svc.search.SearchService.write_consumer">
+<em class="property">async </em><code class="sig-name descname">write_consumer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">audit_path</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">write_queue</span><span class="p">:</span> <span class="n">asyncio.queues.Queue</span></em>, <em class="sig-param"><span class="n">publish_queue</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>asyncio.queues.Queue<span class="p">]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/search_svc/search.html#SearchService.write_consumer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService.write_consumer" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>used by the Search Service only right now.</p>
+</div></blockquote>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>this could be refactored by async_queue.worker</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>audit_path</strong> – path to audit file</p></li>
+<li><p><strong>publish_queue</strong> – </p></li>
+<li><p><strong>write_queue</strong> – asyncio.Queue where each queue item is a list of asyncio.Futures for parsing the responses</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="search_svc.search.SearchService._query_gen">
+<code class="sig-name descname">_query_gen</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">business_configuration</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)">dict</a><a class="reference internal" href="../_modules/search_svc/search.html#SearchService._query_gen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService._query_gen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds a query for Google search. Wraps the entity and the keyword in double quotes. Calls other helper
+functions for query creation.</p>
+<ul class="simple">
+<li><p>Uses the language class attribute to incorporate language specific component to url.</p></li>
+<li><p>The html encoded entities are created using the entities instance attribute called with
+the`_encode_make_phrase` method.</p></li>
+<li><p>Combines all the keywords with quotes, spaces, and OR if applicable according to or_combine_kw  instance
+attribute and calling _encode_keyword_combos method</p></li>
+<li><p>Creates <cite>site:website</cite> if websites provided as website
+instance attribute, and combines with OR if applicable and calling _encode_site_search method</p></li>
+<li><p>Creates date to-from string if date range provided as the date_range instance attribute and calling
+` _encode_date_ranges` method</p></li>
+<li><p>Creates keywords_excluded string if they were provided in keywords_excluded
+instance attribute and calling _encode_keywords_excluded method.</p></li>
+</ul>
+<p>Args: entities (list): Entities list if user wanted to override self.entities</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Generator of dicts of (entity, query, cache_url, retries)</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<dl class="simple">
+<dt>Input:</dt><dd><p>service = ‘google’
+entities = [“Joe Black”]
+keywords = {‘es’: [“crime”,”launder”]}
+or_combine_kw = True
+date_range=[‘w’]
+keywords_exclusion = [‘yahoo.com’]
+websites = [‘bloomberg.com’]
+language = ‘es’</p>
+</dd>
+</dl>
+<p>Output:</p>
+<blockquote>
+<div><p>Resulting URL:
+<a class="reference external" href="https://www.google.com/search?safe=strict&amp;q=">https://www.google.com/search?safe=strict&amp;q=</a>”Joe Black” AND (“crime” OR “launder”) site:bloomberg.com
+-yahoo.com&amp;hl=es-419&amp;gl=US&amp;ceid=US:es-419&amp;tbs=qdr:w</p>
+<p>Resulting URL (encoded):
+‘<a class="reference external" href="https://www.google.com/search?safe=strict&amp;q=%22Joe+Black%22+AND+%28%22crime%22+OR+%22launder%22%29+site">https://www.google.com/search?safe=strict&amp;q=%22Joe+Black%22+AND+%28%22crime%22+OR+%22launder%22%29+site</a>
+%3Abloomberg.com%20-yahoo.com&amp;hl=es-419&amp;gl=US&amp;ceid=US:es-419+&amp;tbs=qdr%3Aw’</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="search_svc.search.SearchService.update_configs">
+<code class="sig-name descname">update_configs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/search_svc/search.html#SearchService.update_configs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService.update_configs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="search_svc.search.SearchService.check_configs">
+<code class="sig-name descname">check_configs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">business_function</span></em>, <em class="sig-param"><span class="n">client</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/search_svc/search.html#SearchService.check_configs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService.check_configs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="search_svc.search.SearchService.make_configuration">
+<code class="sig-name descname">make_configuration</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/search_svc/search.html#SearchService.make_configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService.make_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract configuration for a specific search</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.9)"><em>dict</em></a>) – JSON response message containing instructions on how to do a search</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="search_svc.search.SearchService._assign_query_gen_inputs">
+<code class="sig-name descname">_assign_query_gen_inputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entity</span></em>, <em class="sig-param"><span class="n">business_configuration</span></em>, <em class="sig-param"><span class="n">client_search_configs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/search_svc/search.html#SearchService._assign_query_gen_inputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService._assign_query_gen_inputs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="search_svc.search.SearchService._get_start_url_host_lang">
+<code class="sig-name descname">_get_start_url_host_lang</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">language</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">business_configuration</span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a><span class="p">]</span><a class="reference internal" href="../_modules/search_svc/search.html#SearchService._get_start_url_host_lang"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService._get_start_url_host_lang" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read service configs to obtain the start_url and host_lang parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>language</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – language for the search</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>start_url for the TLD
+host_lang (str): language and geolocation-specific encoding applied to the url</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>start_url (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="search_svc.search.SearchService._encode_make_phrase">
+<em class="property">static </em><code class="sig-name descname">_encode_make_phrase</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">words</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em>, <em class="sig-param"><span class="n">space</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)">str</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/search_svc/search.html#SearchService._encode_make_phrase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService._encode_make_phrase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function. Makes a HTML encoded string using words and spaces using html encodings to replaces spaces and
+quotes with their % counterparts (ex. Space (‘’) = ‘+’ and so on). Space variable can be anything to add
+after the double quotes following the word.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>words</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Word to make phrase with</p></li>
+<li><p><strong>space</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – space</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>empty string if word is None else word wrapped in quotes with space.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="search_svc.search.SearchService._encode_site_search">
+<em class="property">static </em><code class="sig-name descname">_encode_site_search</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">websites</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a></span></em>, <em class="sig-param"><span class="n">or_combine_websites</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)">bool</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/search_svc/search.html#SearchService._encode_site_search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService._encode_site_search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds site:http://www.website.com to Google search. If website == ‘None’, then default case is to NOT include
+site:example.com. This is useful if a search would like to search specific sites as well as not.</p>
+<p>Ex. <cite>site:xyz.com</cite> for one search and not including this string in another search.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>website.com’  if websites else empty string</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string  ‘site</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="search_svc.search.SearchService._encode_keywords_excluded">
+<em class="property">static </em><code class="sig-name descname">_encode_keywords_excluded</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">keywords_excluded</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/search_svc/search.html#SearchService._encode_keywords_excluded"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService._encode_keywords_excluded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate string of filter keywords. This is to remove those keywords from search results.
+This is akin to typing: -excluded_kw1 -excluded_kw2 etc. In the search bar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<dl class="simple">
+<dt>Input:</dt><dd><p>keywords_excluded = [‘a’, ‘b’, ‘c’]</p>
+</dd>
+<dt>Output:</dt><dd><p>‘%20-a%20-b%20-c’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="search_svc.search.SearchService._encode_date_ranges">
+<em class="property">static </em><code class="sig-name descname">_encode_date_ranges</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date_range</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/search_svc/search.html#SearchService._encode_date_ranges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService._encode_date_ranges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter search results by date. Takes date_range list and parses the info inside and creates the string to be
+added to the query.</p>
+<p>Possible options for the element inside the date_range list are:</p>
+<ul class="simple">
+<li><p>“anytime” or “a”</p></li>
+<li><p>“hour” or “h”(past hour)</p></li>
+<li><p>“day” or “d” (past day)</p></li>
+<li><p>“week” or “w” (past week)</p></li>
+<li><p>“month” or “m” (past month)</p></li>
+<li><p>“year” or “y” (past year)</p></li>
+<li><dl class="simple">
+<dt>mm/dd/yyyy,mm/dd/yyyy (between two dates with earliest first)</dt><dd><ul>
+<li><p>The code handles the case where the two dates are out of order.</p></li>
+<li><p>The delimeter between the two dates can be one of ‘,- ‘ (comma, hyphen or space)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>string with the HTML encoded date</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<dl class="simple">
+<dt>Input:</dt><dd><p>date1, date2 are format mm/dd/yyyy,mm/dd/yyyy</p>
+</dd>
+<dt>Output:</dt><dd><p>‘&amp;tbs=cdr%3A1%2Ccd_min%3A’ + date1 + ‘%2Ccd_max%3A’ + date2</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="search_svc.search.SearchService._encode_keyword_combos">
+<em class="property">static </em><code class="sig-name descname">_encode_keyword_combos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">keywords</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)">list</a></span></em>, <em class="sig-param"><span class="n">degree</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)">int</a></span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/search_svc/search.html#SearchService._encode_keyword_combos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService._encode_keyword_combos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates tuples for combinations of keywords. See here for more information on how the degree works:
+<a class="reference external" href="https://en.wikipedia.org/wiki/Binomial_coefficient">https://en.wikipedia.org/wiki/Binomial_coefficient</a> Most times we want to use degree=1. However, for research
+purposes we may want to test out different keyword combinations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keywords</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><em>list</em></a>) – list of keywords. If provided from config file, provide self.keywords[language] to get</p></li>
+<li><p><strong>list</strong> (<em>the</em>) – </p></li>
+<li><p><strong>degree</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a>) – Degree of combinations (the k in n_choose_k from Probability &amp; Statistics</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Generator tuples of form (comb(keywords,1), keyword)</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>k = [‘a’, ‘b’, ‘c’, ‘d’]</p>
+<dl class="simple">
+<dt>Input:</dt><dd><p>combos(k,2)</p>
+</dd>
+<dt>Output:</dt><dd><p>(“a”%20”b”, ‘a b’)
+(“a”%20”c”, ‘a c’)
+(“a”%20”d”, ‘a d’)
+(“b”%20”c”, ‘b c’)
+(“b”%20”d”, ‘b d’)
+(“c”%20”d”, ‘c d’)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="search_svc.search.SearchService._type_checking">
+<em class="property">static </em><code class="sig-name descname">_type_checking</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/search_svc/search.html#SearchService._type_checking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search.SearchService._type_checking" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rudimentary type checking of input variables. This is run at the end of the __init__ instance of a class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None, if checked inputs pass given criteria</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-search_svc.search_service_driver">
+<span id="search-svc-search-service-driver-module"></span><h2>search_svc.search_service_driver module<a class="headerlink" href="#module-search_svc.search_service_driver" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="search_svc.search_service_driver.main">
+<em class="property">async </em><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_queue</span></em>, <em class="sig-param"><span class="n">output_queue</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/search_svc/search_service_driver.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#search_svc.search_service_driver.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-search_svc">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-search_svc" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="download_svc.html" class="btn btn-neutral float-right" title="download_svc package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="core.html" class="btn btn-neutral float-left" title="core package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, E.S.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

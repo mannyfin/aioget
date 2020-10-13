@@ -1,0 +1,17 @@
+tests/
+docs/
+.git/
+.idea/
+.ipynb_checkpoints/
+models/
+webpages/
+lobs/
+rabbit/
+mapping.txt
+nohup.out
+*/nohup.out
+*/*.pid
+*.out
+*.pid
+src/
+webpages/*

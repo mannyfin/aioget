@@ -1,0 +1,37 @@
+{
+  "connections": 100,
+  "retries": 10,
+  "timeout": 100,
+  "use_proxy": false,
+  "use_headers": true,
+  "service_option": {
+    "google": {
+      "en": {
+        "start_url": "https://www.google.com/search?safe=strict&q=",
+        "host_lang": ""
+      },
+      "es": {
+        "start_url": "https://www.google.es/search?safe=strict&q=",
+        "host_lang": "&hl=es-419&gl=US&ceid=US:es-419"
+      },
+      "spain": {
+        "start_url": "https://www.google.es/search?safe=strict&q=",
+        "host_lang": "&lr=lang_es&hl=es&gl=ES&cr=countryES"
+      }
+    },
+    "googlenews": {
+      "en": {
+        "start_url": "https://news.google.com/search?q=",
+        "host_lang": ""
+      },
+      "es": {
+        "start_url": "https://news.google.com/search?q=",
+        "host_lang": "&hl=es-419&gl=US&ceid=US:es-419"
+      }
+    }
+  },
+  "redis_db_params": {
+    "host": "redis",
+    "port": 6379,
+    "db":  0
+  }}
